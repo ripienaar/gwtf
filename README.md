@@ -1,7 +1,7 @@
 What?
 =====
 
-Go With The Flow is a Unix CLI centeric todo/task tracker.
+Go With The Flow is a Unix CLI orientated todo/task tracker.
 
 Each todo item has a short description, a optional long description,
 a status and a work log.
@@ -93,7 +93,7 @@ on it using gwtf:
     % gwtf shell 3
     Starting work on item 3, exit to record the action and time
 
-This shell will have GWTF_ITEM, GWTF_PROJECT and GWTF_SUBJECT enviroment
+This shell will have GWTF_ITEM, GWTF_PROJECT and GWTF_SUBJECT environment
 variables set for use in your prompt or shell script.
 
 Now you can work in this shell and once you're done simply exit it:
@@ -152,7 +152,7 @@ And confirm the change is active:
         --help                - Show this message
         --project, -p project - Active project (default: acme)
 
-You can reset to factory defaults by just rmoving the _~/.gwtf_ file or by changing
+You can reset to factory defaults by just removing the _~/.gwtf_ file or by changing
 the defaults again.
 
 Contact?
