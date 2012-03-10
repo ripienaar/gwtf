@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+# 1.9 adds realpath to resolve symlinks; 1.8 doesn't
+# have this method, so we add it so we get resolved symlinks
+# and compatibility
+unless File.respond_to? :realpath
+  class File #:nodoc:
+    def self.realpath path
+      return realpath(File.readlink(path)) if symlink?(path)
+      path
+    end
+  end
+end
+$: << File.expand_path(File.dirname(File.realpath(__FILE__)) + '/../lib')
+
+require 'rubygems'
+require 'gli'
+require 'gwtf'
+
+include GLI
+
+program_desc 'Go With The Flow'
+
+version Gwtf::VERSION
+
+config_file '.gwtf'
+
+desc 'Path to storage directory'
+long_desc "Where to store the database of items"
+default_value File.join(Etc.getpwuid.dir, ".gwtf.d")
+arg_name "data_dir"
+flag [:data, :d]
+
+Gwtf.each_command do |command|
+  load command
+end
+
+pre do |global,command,options,args|
+  unless File.directory?(global[:data])
+    Gwtf::Items.setup(global[:data])
+  end
+
+  @items = Gwtf::Items.new(global[:data])
+
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit GLI.run(ARGV)
