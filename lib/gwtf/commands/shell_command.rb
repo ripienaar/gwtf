@@ -12,6 +12,7 @@ command :shell do |c|
 
     ENV["GWTF_ITEM"] = item.item_id.to_s
     ENV["GWTF_PROJECT"] = global_options[:project]
+    ENV["GWTF_SUBJECT"] = item.subject
 
     system(ENV["SHELL"])
 

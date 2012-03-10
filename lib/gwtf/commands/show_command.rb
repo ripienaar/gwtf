@@ -35,6 +35,7 @@ command [:show, :s] do |c|
     time_spent = 0
 
     item.work_log.each_with_index do |log, idx|
+      puts
       puts "Work Log: " if idx == 0
 
       puts "%27s %s" % [Time.parse(log["time"]).strftime("%D %R"), log["text"]]
