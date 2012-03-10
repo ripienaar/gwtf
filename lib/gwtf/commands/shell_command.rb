@@ -10,6 +10,9 @@ command :shell do |c|
 
     puts "Starting work on item #{item.item_id}, exit to record the action and time"
 
+    ENV["GWTF_ITEM"] = item.item_id.to_s
+    ENV["GWTF_PROJECT"] = global_options[:project]
+
     system(ENV["SHELL"])
 
     elapsed_time = Time.now - start_time
@@ -18,7 +21,13 @@ command :shell do |c|
 
     print "Optional description for work log: "
 
-    description = STDIN.gets.chomp
+    begin
+      description = STDIN.gets.chomp
+    rescue Exception
+      puts
+      description = ""
+    end
+
     description = "Worked in a subshell" if description == ""
     description = description + " (#{Gwtf.seconds_to_human(elapsed_time.round)})"
 

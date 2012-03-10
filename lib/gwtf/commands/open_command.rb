@@ -11,7 +11,7 @@ command [:open, :o] do |c|
     item.open
     item.save
 
-    puts "Marked item #{args.first} as open"
+    puts "Item #{args.first} as been re-opened"
   end
 end
 

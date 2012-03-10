@@ -30,16 +30,25 @@ default_value File.join(Etc.getpwuid.dir, ".gwtf.d")
 arg_name "data_dir"
 flag [:data, :d]
 
+desc 'Active project'
+long_desc "Change the active project"
+default_value "default"
+arg_name "project"
+flag [:project, :p]
+
 Gwtf.each_command do |command|
   load command
 end
 
 pre do |global,command,options,args|
-  unless File.directory?(global[:data])
-    Gwtf::Items.setup(global[:data])
+  project_dir = File.join(global[:data], global[:project])
+
+  unless File.directory?(project_dir)
+    puts "Created a new project %s in %s" % [global[:project], project_dir]
+    Gwtf::Items.setup(project_dir)
   end
 
-  @items = Gwtf::Items.new(global[:data])
+  @items = Gwtf::Items.new(project_dir)
 
   true
 end

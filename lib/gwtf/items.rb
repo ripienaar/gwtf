@@ -1,5 +1,9 @@
 module Gwtf
   class Items
+    def self.config_file(data_dir)
+      File.expand_path(File.join(data_dir, "..", "gwtf.json"))
+    end
+
     def self.setup(data_dir)
       require 'fileutils'
 
@@ -9,8 +13,10 @@ module Gwtf
       FileUtils.mkdir_p(File.join(data_dir, "archive"))
       FileUtils.mkdir_p(File.join(data_dir, "garbage"))
 
-      File.open(File.join(data_dir, "gwtf.json"), "w") do |f|
-        f.print({"next_item" => 0}.to_json)
+      unless File.exist?(config_file(data_dir))
+        File.open(config_file(data_dir), "w") do |f|
+          f.print({"next_item" => 0}.to_json)
+        end
       end
     end
 
@@ -39,13 +45,13 @@ module Gwtf
     end
 
     def read_config
-      JSON.parse(File.read(File.join(@data_dir, "gwtf.json")))
+      JSON.parse(File.read(Items.config_file(@data_dir)))
     end
 
     def save_config
       raise "Config has not been loaded" unless @config
 
-      File.open(File.join(@data_dir, "gwtf.json"), "w") do |f|
+      File.open(Items.config_file(@data_dir), "w") do |f|
         f.print(@config.to_json)
       end
     end
