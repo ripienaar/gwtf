@@ -11,11 +11,13 @@ spec = Gem::Specification.new do |s|
   s.summary = 'Go With The Flow'
   s.description = "A Unix cli centric todo manager"
 # Add your other files here if you make them
-  s.files = FileList["{bin,lib}/**/*"].to_a
+  s.files = FileList["{README.md,COPYING,bin,lib}/**/*"].to_a
   s.require_paths << 'lib'
   s.has_rdoc = false
   s.bindir = 'bin'
   s.executables << 'gwtf'
   s.add_development_dependency('rake')
   s.add_development_dependency('rdoc')
+  s.add_dependency 'json'
+  s.add_dependency 'gli', "~>1.5.1"
 end

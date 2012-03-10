@@ -158,4 +158,4 @@ the defaults again.
 Contact?
 ========
 
-R.I.Pienaar / rip@devco.net / @ripienaar
+R.I.Pienaar / rip@devco.net / @ripienaar / http://devco.net/
