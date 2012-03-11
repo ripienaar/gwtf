@@ -56,6 +56,32 @@ module Gwtf
        "work_log" => []}
     end
 
+    def time_worked
+      work_log.inject(0) do |result, log|
+        begin
+          result + log["elapsed"]
+        rescue
+          result
+        end
+      end
+    end
+
+    def flags
+      flag = []
+
+      flag << "closed" if closed?
+      flag << "open" if open?
+      flag << "descr" if description?
+      flag << work_log.size.to_s unless work_log.empty?
+      flag
+    end
+
+    def to_s
+      flag = " (#{flags.join(',')})" unless flags.empty?
+
+      "%s%s: %s" % [item_id, flag, subject]
+    end
+
     def to_hash
       @item
     end

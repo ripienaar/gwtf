@@ -11,8 +11,6 @@ command [:open, :o] do |c|
     item.open
     item.save
 
-    puts "Item #{args.first} as been re-opened"
+    puts item
   end
 end
-
-

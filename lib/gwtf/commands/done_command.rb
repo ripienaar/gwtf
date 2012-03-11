@@ -8,6 +8,6 @@ command [:done, :d] do |c|
     item.close
     item.save
 
-    puts "Marked item #{args.first} as done"
+    puts item
   end
 end

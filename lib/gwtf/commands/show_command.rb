@@ -6,18 +6,10 @@ command [:show, :s] do |c|
 
     item = @items.load_item(args.first)
 
-    time_worked = item.work_log.inject(0) do |result, log|
-      begin
-        result + log["elapsed"]
-      rescue
-        result
-      end
-    end
-
     puts "         ID: %s" % [ item.item_id ]
     puts "    Subject: %s" % [ item.subject ]
     puts "     Status: %s" % [ item.status ]
-    puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ]
+    puts "Time Worked: %s" % [ Gwtf.seconds_to_human(item.time_worked) ]
     puts "    Created: %s" % [ Time.parse(item.created_at).strftime("%D %R") ]
     puts "     Closed: %s" % [ Time.parse(item.closed_at).strftime("%D %R") ] if item.closed?
 
@@ -35,10 +27,13 @@ command [:show, :s] do |c|
     time_spent = 0
 
     item.work_log.each_with_index do |log, idx|
-      puts
+      puts if idx == 0
       puts "Work Log: " if idx == 0
 
-      puts "%27s %s" % [Time.parse(log["time"]).strftime("%D %R"), log["text"]]
+      # we used to automatically embed this into the description which was dumb
+      elapsed = "(%s)" % [Gwtf.seconds_to_human(log["elapsed"])] unless log["text"] =~ /\(.+?\)$/
+
+      puts "%27s %s %s" % [Time.parse(log["time"]).strftime("%D %R"), log["text"], elapsed]
     end
   end
 end

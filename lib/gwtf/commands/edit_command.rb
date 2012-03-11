@@ -30,6 +30,6 @@ command [:edit, :vi, :e] do |c|
 
     item.save
 
-    puts "Item #{item.item_id} has been saved"
+    puts item
   end
 end

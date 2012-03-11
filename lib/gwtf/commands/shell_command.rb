@@ -30,13 +30,12 @@ command :shell do |c|
     end
 
     description = "Worked in a subshell" if description == ""
-    description = description + " (#{Gwtf.seconds_to_human(elapsed_time.round)})"
 
     item.record_work(description, elapsed_time.round)
 
     item.save
 
-    puts "Recorded #{elapsed_time} seconds of work against item #{item.item_id}"
+    puts "Recorded #{Gwtf.seconds_to_human(elapsed_time.round)} of work against item: #{item}"
   end
 end
 
