@@ -1,6 +1,6 @@
 desc 'Create an item'
 arg_name 'Short item description'
-command [:new, :add, :n, :a] do |c|
+command [:new, :add, :n, :a, :c] do |c|
   c.desc 'Invoke EDITOR to provide a long form description'
   c.default_value false
   c.switch [:edit, :e]

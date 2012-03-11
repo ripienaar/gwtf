@@ -81,6 +81,17 @@ But you can list all tasks:
 
     Items: 1 / 2
 
+Editing a task
+--------------
+
+You can edit a task subject right on the command line:
+
+    % gwtf edit 1 /another/the first
+    1 (open): this is the first test task to demonstrate
+
+If you leave off the replacement logic it will edit the item using your
+editor as defined in EDITOR
+
 Logging work done interactively?
 --------------------------------
 

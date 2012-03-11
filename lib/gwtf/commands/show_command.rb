@@ -26,7 +26,7 @@ command [:show, :s] do |c|
 
     time_spent = 0
 
-    item.work_log.each_with_index do |log, idx|
+    item.work_log.reverse.each_with_index do |log, idx|
       puts if idx == 0
       puts "Work Log: " if idx == 0
 
