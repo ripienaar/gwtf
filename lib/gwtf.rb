@@ -14,6 +14,15 @@ module Gwtf
     end
   end
 
+  def self.projects(root_dir)
+    Dir.entries(root_dir).map do |entry|
+      next if entry =~ /^\./
+        next unless File.directory?(File.join(root_dir, entry))
+
+      entry
+    end.compact.sort
+  end
+
   # borrowed from ohai, thanks Adam.
   def self.seconds_to_human(seconds)
     days = seconds.to_i / 86400

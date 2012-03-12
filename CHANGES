@@ -1,3 +1,4 @@
+2012/03/12 - Add --summary to the ls application
 2012/03/12 - Validate a subject was provided when adding new items
 2012/03/12 - Release version 0.2.0
 2012/03/12 - Show the project name in list output
