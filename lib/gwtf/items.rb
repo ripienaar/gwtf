@@ -56,8 +56,8 @@ module Gwtf
       end
     end
 
-    def items
-      Dir.entries(@data_dir).grep(/\.gwtf$/).sort.map{|i| File.basename(i, ".gwtf")}
+    def item_ids
+      Dir.entries(@data_dir).grep(/\.gwtf$/).map{|i| File.basename(i, ".gwtf")}.map{|i| Integer(i)}.sort
     end
 
     def file_for_item(item)
@@ -65,7 +65,7 @@ module Gwtf
     end
 
     def each_item
-      items.each {|item| yield load_item(item) }
+      item_ids.each {|item| yield load_item(item) }
     end
   end
 end

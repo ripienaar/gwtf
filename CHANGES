@@ -1,1 +1,4 @@
 2012/03/11 - Support editing subjects on the cli: gwtf e 1 /foo/bar
+2012/03/12 - Add a simple reminder command that sends mail via the at command
+2012/03/12 - Show the created date in the list output
+2012/03/12 - Sort the list in numeric order rather than alphabetical

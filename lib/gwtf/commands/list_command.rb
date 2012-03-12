@@ -10,14 +10,15 @@ command [:list, :ls, :l] do |c|
     @items.each_item do |item|
       count[ item[:status] ] += 1
 
-      item.has_description ? id = "*#{item.item_id.to_s}" : id = item.item_id.to_s
+      flags = []
+      flags << "D" if item.has_description?
+      flags << "C" if item.closed? && options[:all]
 
-      puts "%5s %-3s%8s" % [ id, "", item.subject] if item.open?
-      puts "%5s %-3s%8s" % [ id, "C", item.subject] if (item.closed? && options[:all])
+      puts "%5s %-4s%-10s%8s" % [ item.item_id, flags.join, Time.parse(item.created_at).strftime("%D"), item.subject ] if (options[:all] || item.open?)
     end
 
     puts
-    puts "Items: %d / %d" % [count["open"], count["open"] + count["closed"]]
+    puts "Items: %d / %d" % [ count["open"], count["open"] + count["closed"] ]
   end
 end
 
