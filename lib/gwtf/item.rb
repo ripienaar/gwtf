@@ -76,6 +76,42 @@ module Gwtf
       flag
     end
 
+    def summary
+      summary = StringIO.new
+
+      summary.puts "         ID: %s" % [ item_id ]
+      summary.puts "    Subject: %s" % [ subject ]
+      summary.puts "     Status: %s" % [ status ]
+      summary.puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ]
+      summary.puts "    Created: %s" % [ Time.parse(created_at).strftime("%D %R") ]
+      summary.puts "     Closed: %s" % [ Time.parse(closed_at).strftime("%D %R") ] if closed?
+
+      if has_description?
+        summary.puts
+        summary.puts "Description:"
+
+        description.split("\n").each do |line|
+          summary.puts "%13s%s" % [ "", line]
+        end
+
+        summary.puts
+      end
+
+      time_spent = 0
+
+      work_log.reverse.each_with_index do |log, idx|
+        summary.puts if idx == 0
+        summary.puts "Work Log: " if idx == 0
+
+        # we used to automatically embed this into the description which was dumb
+        elapsed = "(%s)" % [Gwtf.seconds_to_human(log["elapsed"])] unless log["text"] =~ /\(.+?\)$/
+
+        summary.puts "%27s %s %s" % [Time.parse(log["time"]).strftime("%D %R"), log["text"], elapsed]
+      end
+
+      summary.string
+    end
+
     def to_s
       flag = " (#{flags.join(',')})" unless flags.empty?
 
