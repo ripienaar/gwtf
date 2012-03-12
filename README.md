@@ -84,6 +84,14 @@ But you can list all tasks:
 The _C_ and _D_ flags indicate that item 0 is Closed while item 1 has a
 full Description that you can view with the show command
 
+There's a short summary mode ideal for using in your login scripts:
+
+    % gwtf ls --summary
+    Items in all projects:
+
+       gwtf: open:   5: closed   4: total:   9
+       test: open:   0: closed   4: total:   4
+
 Editing a task
 --------------
 

@@ -25,7 +25,7 @@ command [:list, :ls, :l] do |c|
           item.open? ?  open += 1 : closed +=1
         end
 
-        puts "%#{longest_name}s: open: %3d: closed %3d: total: %3d" % [ project, open, closed, open+closed ]
+        puts "%#{longest_name}s: open: %3d: closed %3d: total: %3d" % [ project, open, closed, open+closed ] unless open == 0 && closed == 0
 
       end
 
