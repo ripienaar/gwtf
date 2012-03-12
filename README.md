@@ -166,6 +166,23 @@ And confirm the change is active:
 You can reset to factory defaults by just removing the _~/.gwtf_ file or by changing
 the defaults again.
 
+Reminders
+=========
+
+To facilitate reminders by email we use your at system and the normal mail command present
+in most Unix systems.  To schedule a reminder for an item you can use anything your at will
+accept as a time specification:
+
+    % gwtf remind 3 now + 1 week
+
+This will create an at job that will in a week call gwtf asking it to send an email immediately.
+The email will be sent using the normal mail command to your unix user.  You should have a
+.forward file in place to send mail to where you need it otherwise you can invoke the remind
+command with --recipient
+
+To cancel reminders or see which ones you have scheduled use your normal at commands like atq
+and atrm
+
 Contact?
 ========
 
