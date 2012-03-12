@@ -1,4 +1,7 @@
-2012/03/11 - Support editing subjects on the cli: gwtf e 1 /foo/bar
+2012/03/12 - Release version 0.2.0
+2012/03/12 - Show the project name in list output
+2012/03/12 - Show dates in ISO 8601 format
 2012/03/12 - Add a simple reminder command that sends mail via the at command
 2012/03/12 - Show the created date in the list output
 2012/03/12 - Sort the list in numeric order rather than alphabetical
+2012/03/11 - Support editing subjects on the cli: gwtf e 1 /foo/bar

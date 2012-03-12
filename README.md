@@ -69,17 +69,20 @@ List of tasks
 By default completed tasks are not shown:
 
     % gwtf list
-        1    this is another test task to demonstrate
+        1 D   2012-03-10 this is another test task to demonstrate
 
     Items: 1 / 2
 
 But you can list all tasks:
 
     % gwtf ls -a
-        0 C  this is a test task
-        1    this is another test task to demonstrate
+        0 C   2012-03-10 this is a test task
+        1 D   2012-03-10 this is another test task to demonstrate
 
     Items: 1 / 2
+
+The _C_ and _D_ flags indicate that item 0 is Closed while item 1 has a
+full Description that you can view with the show command
 
 Editing a task
 --------------
@@ -103,6 +106,7 @@ on it using gwtf:
 
     % gwtf shell 3
     Starting work on item 3, exit to record the action and time
+    %
 
 This shell will have GWTF_ITEM, GWTF_PROJECT and GWTF_SUBJECT environment
 variables set for use in your prompt or shell script.
@@ -138,8 +142,25 @@ set of tasks in a different sub-directory off the top directory.
 Note that item numbers a unique for the entire installation to avoid
 confusion due to overlapping item numbers.
 
-Default Project and Data Dir?
-=============================
+Reminders
+=========
+
+To facilitate reminders by email we use your at system and the normal mail command present
+in most Unix systems.  To schedule a reminder for an item you can use anything your at will
+accept as a time specification:
+
+    % gwtf remind 3 now + 1 week
+
+This will create an at job that will in a week call gwtf asking it to send an email immediately.
+The email will be sent using the normal mail command to your unix user.  You should have a
+.forward file in place to send mail to where you need it otherwise you can invoke the remind
+command with --recipient
+
+To cancel reminders or see which ones you have scheduled use your normal at commands like atq
+and atrm
+
+Default Project, Data Dir or Email Recipient?
+=============================================
 
 You can adjust the default data dir and project which would then be saved
 into the config file - _~/.gwtf_:
@@ -166,22 +187,16 @@ And confirm the change is active:
 You can reset to factory defaults by just removing the _~/.gwtf_ file or by changing
 the defaults again.
 
-Reminders
-=========
+You can also set defaults for options to individual commands, after running initconfig
+your _~/.gwtf_ file will have empty space for each command.  If you wanted to specify a
+default email address for reminders simply edit that file and put in:
 
-To facilitate reminders by email we use your at system and the normal mail command present
-in most Unix systems.  To schedule a reminder for an item you can use anything your at will
-accept as a time specification:
+    commands:
+      :remind:
+        :recipient: rip@devco.net
 
-    % gwtf remind 3 now + 1 week
-
-This will create an at job that will in a week call gwtf asking it to send an email immediately.
-The email will be sent using the normal mail command to your unix user.  You should have a
-.forward file in place to send mail to where you need it otherwise you can invoke the remind
-command with --recipient
-
-To cancel reminders or see which ones you have scheduled use your normal at commands like atq
-and atrm
+Now _gwtf help remind_ will show it's defaulting to the new email address so you do not
+have to keep typing the --recipient on every invocation.
 
 Contact?
 ========

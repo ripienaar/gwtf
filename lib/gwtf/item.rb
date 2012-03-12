@@ -82,8 +82,8 @@ module Gwtf
       summary.puts "    Subject: %s" % [ subject ]
       summary.puts "     Status: %s" % [ status ]
       summary.puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ]
-      summary.puts "    Created: %s" % [ Time.parse(created_at).strftime("%D %R") ]
-      summary.puts "     Closed: %s" % [ Time.parse(closed_at).strftime("%D %R") ] if closed?
+      summary.puts "    Created: %s" % [ Time.parse(created_at).strftime("%F %R") ]
+      summary.puts "     Closed: %s" % [ Time.parse(closed_at).strftime("%F %R") ] if closed?
       summary.puts "         ID: %s" % [ item_id ]
 
       if has_description?
@@ -106,7 +106,7 @@ module Gwtf
         # we used to automatically embed this into the description which was dumb
         elapsed = "(%s)" % [Gwtf.seconds_to_human(log["elapsed"])] unless log["text"] =~ /\(.+?\)$/
 
-        summary.puts "%27s %s %s" % [Time.parse(log["time"]).strftime("%D %R"), log["text"], elapsed]
+        summary.puts "%27s %s %s" % [Time.parse(log["time"]).strftime("%F %R"), log["text"], elapsed]
       end
 
       summary.string
