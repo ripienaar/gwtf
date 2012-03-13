@@ -48,7 +48,7 @@ pre do |global,command,options,args|
     Gwtf::Items.setup(project_dir)
   end
 
-  @items = Gwtf::Items.new(project_dir)
+  @items = Gwtf::Items.new(project_dir, global[:project])
 
   true
 end

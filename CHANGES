@@ -1,3 +1,9 @@
+2012/03/13 - Add reminder options to the new command
+2012/03/13 - In item lists also show if a item has work log items
+2012/03/13 - Add an --overview option to ls that shows all outstanding tasks in all projects
+2012/03/13 - Allow users to close items as part of the shell description
+2012/03/13 - Add a --ifopen option to remind that will only remind if the item is still open
+2012/03/13 - Add --done option to the remind command that will also close an item after reminding
 2012/03/12 - Add --summary to the ls application
 2012/03/12 - Validate a subject was provided when adding new items
 2012/03/12 - Release version 0.2.0

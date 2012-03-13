@@ -30,11 +30,23 @@ Adding a task
 
     % gwtf new this is a test task
     Created a new project default in /home/rip/.gwtf.d/default
-    Item 0 saved
+       29     2012-03-13  this is a test task
 
 You can pass an optional _--edit_ or _-e_ flag to the new command that
 will start your editor configured using EDITOR to edit the long form
 description of a task
+
+When creating an item you can pass the same arguments as to the remind
+command which will schedule an emailed reminder.  See the _Reminders_
+section below for details.
+
+    % gwtf new this is a test --remind="now + 1 week" --done --ifopen
+    Creating reminder at job for item 30: job 46 at 2012-03-13 20:09
+       30     2012-03-13  this is a test
+
+The above command will send an email alert 1 week from now if the item has
+not already been completed and mark the item as done after sending the alert,
+more details in the Remind section
 
 Logging work for a task
 -----------------------
@@ -82,7 +94,8 @@ But you can list all tasks:
     Items: 1 / 2
 
 The _C_ and _D_ flags indicate that item 0 is Closed while item 1 has a
-full Description that you can view with the show command
+full Description that you can view with the show command. There is also a
+_L_ flag that indicate an item has work log items.
 
 There's a short summary mode ideal for using in your login scripts:
 
@@ -122,7 +135,7 @@ variables set for use in your prompt or shell script.
 Now you can work in this shell and once you're done simply exit it:
 
     % exit
-    Optional description for work log: First stab at writing a readme file
+    Optional description for work log (start with done! to close):: First stab at writing a readme file
     Recorded 91.6566 seconds of work against item 3
 
 Your log will be visible in the show command along with a total work time
@@ -164,8 +177,26 @@ The email will be sent using the normal mail command to your unix user.  You sho
 .forward file in place to send mail to where you need it otherwise you can invoke the remind
 command with --recipient
 
+If all you really want is to schedule a reminder for some future task you pass --done to the
+remind command which will then mark your item done after reminding you about it.  A note of
+the action will be added to the work log.
+
+If you want to set a reminder for a future time but only if the item is still open by that time
+pass the --ifopen flag when creating the reminder
+
 To cancel reminders or see which ones you have scheduled use your normal at commands like atq
 and atrm
+
+Daily Summary Emails
+====================
+
+There is no built in mailer for daily summary mails but they are very easy to achieve with cron
+and the mail command:
+
+    @daily gwtf ls --overview | mail -s "Daily Summary of Tasks" you@your.com
+
+Put that in your users crontab with _crontab -e_ and you should get daily mails listing all
+outstanding tasks for all projects.
 
 Default Project, Data Dir or Email Recipient?
 =============================================

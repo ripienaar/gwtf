@@ -5,6 +5,22 @@ command [:new, :add, :n, :a, :c] do |c|
   c.default_value false
   c.switch [:edit, :e]
 
+  c.desc 'Schedule a reminder about this task'
+  c.default_value false
+  c.flag [:remind]
+
+  c.desc 'Mark item done after sending reminder'
+  c.default_value false
+  c.switch [:done]
+
+  c.desc 'Only alert if the item is still marked open'
+  c.default_value false
+  c.switch [:ifopen]
+
+  c.desc 'Email address to send to'
+  c.default_value Etc.getlogin
+  c.flag [:recipient, :r]
+
   c.action do |global_options,options,args|
     subject = args.join(" ")
     raise "Please supply a short desciption for the item on the command line" if subject == ""
@@ -28,6 +44,14 @@ command [:new, :add, :n, :a, :c] do |c|
     item.subject = subject
     item.description = description if description
     item.save
+
+    if options[:remind]
+      STDOUT.sync
+
+      print "Creating reminder at job for item #{item.item_id}: "
+
+      item.schedule_reminer(options[:remind], options[:recipient], options[:done], options[:ifopen])
+    end
 
     puts item
   end

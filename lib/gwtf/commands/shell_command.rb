@@ -20,10 +20,14 @@ command :shell do |c|
 
     STDOUT.sync = true
 
-    print "Optional description for work log: "
+    print "Optional description for work log (start with done! to close): "
 
     begin
       description = STDIN.gets.chomp
+      if description =~ /^(done|close)!\s*(.+)/
+        description = $1
+        item.close
+      end
     rescue Exception
       puts
       description = ""

@@ -1,10 +1,12 @@
 module Gwtf
   class Item
     attr_accessor :file
+    attr_reader :project
 
-    def initialize(file=nil)
+    def initialize(file=nil, project=nil)
       @item = default_item
       @file = file
+      @project = project
 
       load_item if file
     end
@@ -76,6 +78,15 @@ module Gwtf
       flag
     end
 
+    def compact_flags
+      flags = []
+      flags << "D" if has_description?
+      flags << "C" if closed?
+      flags << "L" unless work_log.empty?
+
+      flags
+    end
+
     def summary
       summary = StringIO.new
 
@@ -113,9 +124,7 @@ module Gwtf
     end
 
     def to_s
-      flag = " (#{flags.join(',')})" unless flags.empty?
-
-      "%s%s: %s" % [item_id, flag, subject]
+      "%5s %-4s%-12s%8s" % [ item_id, compact_flags.join, Time.parse(created_at.to_s).strftime("%F"), subject ]
     end
 
     def to_hash
@@ -165,6 +174,15 @@ module Gwtf
 
     def []=(property, value)
       update_property(property, value)
+    end
+
+    def schedule_reminer(timespec, recipient, done=false, ifopen=false)
+      command_args = ["--send"]
+      command_args << "--recipient=%s" % [ recipient ]
+      command_args << "--done" if done
+      command_args << "--ifopen" if ifopen
+
+      system "echo gwtf --project='%s' remind %s %s | at %s" % [ @project, command_args.join(" "), item_id, timespec]
     end
 
     # simple read from the class:
