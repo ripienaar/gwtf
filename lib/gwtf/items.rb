@@ -91,7 +91,7 @@ module Gwtf
     end
 
     # Returns a blob of text that represents a list of items in a project
-    def list_text(all=false)
+    def list_text(all=false, only_if_active=false)
       list = StringIO.new
       items = StringIO.new
 
@@ -103,9 +103,14 @@ module Gwtf
         items.puts item if (all || item.open?)
       end
 
-      list.puts "Project %s items: %d / %d" % [ @project, count["open"], count["open"] + count["closed"] ]
+      count["total"] = count["open"] + count["closed"]
+
+      return nil if only_if_active && count["open"] == 0
+
+      list.puts "Project %s items: %d / %d" % [ @project, count["open"], count["total"] ]
       list.puts
       list.puts items.string
+      list.puts
 
       list.string
     end
