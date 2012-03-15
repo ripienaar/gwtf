@@ -8,6 +8,7 @@ module Gwtf
   require 'fileutils'
   require 'tempfile'
   require 'uri'
+  require 'time'
 
   def self.each_command
     commands_dir = File.join(File.dirname(__FILE__), "gwtf", "commands")
