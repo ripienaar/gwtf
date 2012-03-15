@@ -3,11 +3,11 @@ module Gwtf
   require 'gwtf/item'
   require 'gwtf/version'
   require 'gwtf/notifier/base'
-  require 'gwtf/notifier/email'
   require 'json'
   require 'yaml'
   require 'fileutils'
   require 'tempfile'
+  require 'uri'
 
   def self.each_command
     commands_dir = File.join(File.dirname(__FILE__), "gwtf", "commands")
@@ -23,6 +23,24 @@ module Gwtf
 
       entry
     end.compact.sort
+  end
+
+  def self.notifier_for_address(address)
+    uri = URI.parse(address)
+
+    case uri.scheme
+      when nil, "email"
+        require 'gwtf/notifier/email'
+        return Notifier::Email
+      when "boxcar"
+        gem 'boxcar_api', '>= 1.2.0'
+        require 'boxcar_api'
+        require 'gwtf/notifier/boxcar'
+
+        return Notifier::Boxcar
+      else
+        raise "Do not know how to handle addresses of type #{uri.scheme} for #{address}"
+    end
   end
 
   # borrowed from ohai, thanks Adam.
