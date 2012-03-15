@@ -187,6 +187,9 @@ pass the --ifopen flag when creating the reminder
 To cancel reminders or see which ones you have scheduled use your normal at commands like atq
 and atrm
 
+As of version 0.4.0 you can send notifications to iPhone, iPads and Macs using Boxcar, see
+the BOXCAR.md file in the git repository for details
+
 Daily Summary Emails
 ====================
 

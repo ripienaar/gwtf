@@ -42,7 +42,7 @@ command [:remind, :rem] do |c|
       item = @items.load_item(args.first)
 
       unless options[:ifopen] && item.closed?
-        item.send_reminder(options[:recipient], options[:done], Gwtf::Notifier::Email)
+        item.send_reminder(options[:recipient], options[:done], Gwtf.notifier_for_address(options[:recipient]))
       end
     end
   end
