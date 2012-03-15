@@ -25,7 +25,7 @@ command :shell do |c|
     begin
       description = STDIN.gets.chomp
       if description =~ /^(done|close)!\s*(.+)/
-        description = $1
+        description = $2
         item.close
       end
     rescue Exception
