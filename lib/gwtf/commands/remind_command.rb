@@ -42,28 +42,7 @@ command [:remind, :rem] do |c|
       item = @items.load_item(args.first)
 
       unless options[:ifopen] && item.closed?
-        begin
-          tmp = Tempfile.new("gwtf")
-          tmp.write(item.summary)
-          tmp.rewind
-
-          if global_options[:project] == "default"
-            subject = "Reminder for item %s" % [ args.first ]
-          else
-            subject = "Reminder for item %s in %s project" % [ args.first, global_options[:project] ]
-          end
-
-          system("cat #{tmp.path} | mail -s '#{subject}' '#{options[:recipient]}'")
-
-          if options[:done]
-            item.record_work("Closing item as part of scheduled reminder")
-            item.close
-            item.save
-          end
-        ensure
-          tmp.close
-          tmp.unlink
-        end
+        item.send_reminder(options[:recipient], options[:done], Gwtf::Notifier::Email)
       end
     end
   end

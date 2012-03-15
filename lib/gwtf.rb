@@ -2,6 +2,8 @@ module Gwtf
   require 'gwtf/items'
   require 'gwtf/item'
   require 'gwtf/version'
+  require 'gwtf/notifier/base'
+  require 'gwtf/notifier/email'
   require 'json'
   require 'yaml'
   require 'fileutils'
