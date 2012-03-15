@@ -185,6 +185,16 @@ module Gwtf
       system "echo gwtf --project='%s' remind %s %s | at %s" % [ @project, command_args.join(" "), item_id, timespec]
     end
 
+    def send_reminder(recipient, mark_as_done, klass)
+      klass.new(self, recipient).notify
+
+      if mark_as_done
+        record_work("Closing item as part of scheduled reminder")
+        close
+        save
+      end
+    end
+
     # simple read from the class:
     #
     #   >> i.description
