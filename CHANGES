@@ -1,3 +1,4 @@
+2012/03/18 - The --summary mode of the list command only shows projects with open items
 2012/03/14 - Release 0.4.0
 2012/03/14 - Log the correct part of the message in subshell worklog
 2012/03/15 - Add notifications via boxcar.io

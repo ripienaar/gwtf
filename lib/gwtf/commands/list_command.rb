@@ -23,8 +23,7 @@ command [:list, :ls, :l] do |c|
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)
         stats = items.stats
 
-        puts "%#{longest_name + 3}s: open: %3d: closed %3d: total: %3d" % [ project, stats["open"], stats["closed"], stats["total"] ] unless stats["total"] == 0
-
+        puts "%#{longest_name + 3}s: open: %3d: closed %3d: total: %3d" % [ project, stats["open"], stats["closed"], stats["total"] ] unless stats["open"] == 0
       end
 
       puts
