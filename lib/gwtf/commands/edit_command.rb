@@ -10,25 +10,31 @@ command [:edit, :vi, :e] do |c|
     if args.size == 1
       raise "EDITOR environment variable should be set" unless ENV.include?("EDITOR")
 
-      descr_sep = "== EDIT BETWEEN THESE LINES =="
-
-      temp_item = {"description" => "#{descr_sep}\n#{item.description}\n#{descr_sep}", "subject" => item.subject}
-
       begin
         tmp = Tempfile.new("gwtf")
-        tmp.write(temp_item.to_yaml)
+        tmp.puts "Subject: %s" % [ item.subject ]
+        tmp.puts "Description:"
+        tmp.puts item.description if item.description
         tmp.rewind
         system("%s %s" % [ENV["EDITOR"], tmp.path])
-        edited_item = YAML.load_file(tmp.path)
+        edited_item = File.read(tmp.path)
       ensure
         tmp.close
         tmp.unlink
       end
 
-      item.subject = edited_item["subject"] if edited_item["subject"]
+      if edited_item.split("\n").first =~ /^Subject:\s*(.+)/
+        item.subject = $1
+      else
+        raise "Subject is required"
+      end
 
-      if edited_item["description"] =~ /#{descr_sep}\n(.+)\n#{descr_sep}/m
-        item.description = $1
+      description = edited_item.split("\n")[2..-1]
+
+      unless [description].flatten.compact.empty?
+        item.description = description.join("\n")
+      else
+        item.description = nil
       end
 
       item.save
