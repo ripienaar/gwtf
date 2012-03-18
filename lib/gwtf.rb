@@ -9,6 +9,7 @@ module Gwtf
   require 'tempfile'
   require 'uri'
   require 'time'
+  require 'readline'
 
   def self.each_command
     commands_dir = File.join(File.dirname(__FILE__), "gwtf", "commands")
@@ -41,6 +42,17 @@ module Gwtf
         return Notifier::Boxcar
       else
         raise "Do not know how to handle addresses of type #{uri.scheme} for #{address}"
+    end
+  end
+
+  def self.ask(prompt="")
+    stty_save = `stty -g`.chomp
+
+    begin
+      return Readline.readline("#{prompt} ", true)
+    rescue Interrupt => e
+      system('stty', stty_save)
+      raise
     end
   end
 
