@@ -1,3 +1,4 @@
+2012/03/27 - Support multiple receipients through comma sept list
 2012/03/18 - Release 0.4.1
 2012/03/18 - Use readline for getting the description from users in the shell command
 2012/03/18 - Editing is more reliable and does not use YAML anymore
