@@ -1,3 +1,4 @@
+2012/03/31 - Allow for pre and post scripts to the shell command allowing users to manipulate tmux
 2012/03/28 - Release 0.4.2
 2012/03/27 - Only create new project directories for the 'new' command
 2012/03/27 - Support multiple receipients through comma sept list

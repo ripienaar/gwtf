@@ -150,6 +150,10 @@ for the task:
     Work Log:
                  03/10/12 21:43 First stab at writing a readme file (1 minutes 32 seconds)
 
+You can pass *--pre* and *--post* flags to the shell command that will run shell commands
+before and after the subshell, this is good for tweaking your tmux status bar while working
+on tasks for example
+
 Projects?
 =========
 
