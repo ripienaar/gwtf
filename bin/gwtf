@@ -44,8 +44,8 @@ pre do |global,command,options,args|
   project_dir = File.join(global[:data], global[:project])
 
   unless File.directory?(project_dir)
-    if command.name == :new
-      puts "Created a new project %s in %s" % [global[:project], project_dir]
+    if command.name == :new || global[:project] == "default"
+      puts "Created a new project %s in %s" % [global[:project], project_dir] unless global[:project] == "default"
       Gwtf::Items.setup(project_dir)
     else
       raise "Unknown project %s" % [global[:project]]
