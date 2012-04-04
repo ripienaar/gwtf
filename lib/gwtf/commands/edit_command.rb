@@ -39,7 +39,7 @@ command [:edit, :vi, :e] do |c|
 
       item.save
 
-      puts item
+      puts item.to_s
     else
       editor = args[1..-1].join(" ")
       delim = editor[0,1]
@@ -49,7 +49,7 @@ command [:edit, :vi, :e] do |c|
 
       item.subject = item.subject.gsub(splits[1], splits[2])
       item.save
-      puts item
+      puts item.to_s
     end
   end
 end

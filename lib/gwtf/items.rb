@@ -100,7 +100,7 @@ module Gwtf
       each_item do |item|
         count[ item[:status] ] += 1
 
-        items.puts item if (all || item.open?)
+        items.puts item.to_s if (all || item.open?)
       end
 
       count["total"] = count["open"] + count["closed"]

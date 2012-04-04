@@ -8,6 +8,6 @@ command [:done, :d] do |c|
     item.close
     item.save
 
-    puts item
+    puts item.to_s
   end
 end

@@ -40,7 +40,14 @@ Gwtf.each_command do |command|
   load command
 end
 
+def setup_default(data_dir)
+  project_dir = File.join(data_dir, "default")
+  Gwtf::Items.setup(project_dir) unless File.directory?(project_dir)
+end
+
 pre do |global,command,options,args|
+  setup_default(global[:data])
+
   project_dir = File.join(global[:data], global[:project])
 
   unless File.directory?(project_dir)

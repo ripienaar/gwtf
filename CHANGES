@@ -1,3 +1,5 @@
+2012/04/03 - Release 0.4.4
+2012/04/04 - Improve Ruby 1.9.3 compatability
 2012/04/03 - Release 0.4.3
 2012/04/03 - Silently create the default project dir if it doesnt exist on first run
 2012/03/31 - Allow for pre and post scripts to the shell command allowing users to manipulate tmux

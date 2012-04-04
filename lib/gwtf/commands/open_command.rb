@@ -11,6 +11,6 @@ command [:open, :o] do |c|
     item.open
     item.save
 
-    puts item
+    puts item.to_s
   end
 end

@@ -53,6 +53,6 @@ command [:new, :add, :n, :a, :c] do |c|
       item.schedule_reminer(options[:remind], options[:recipient], options[:done], options[:ifopen])
     end
 
-    puts item
+    puts item.to_s
   end
 end
