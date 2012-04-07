@@ -1,10 +1,18 @@
 module Gwtf
   class Item
+    include ObjHash
+
     attr_accessor :file
     attr_reader :project
 
+    property :description, :default => nil
+    property :subject, :default => nil
+    property :closed_at, :default => nil
+    property :status, :default => "open"
+    property :item_id, :default => nil
+    property :work_log, :default => []
+
     def initialize(file=nil, project=nil)
-      @item = default_item
       @file = file
       @project = project
 
@@ -12,7 +20,7 @@ module Gwtf
     end
 
     def open?
-      @item["status"] == "open"
+      status == "open"
     end
 
     def closed?
@@ -24,7 +32,7 @@ module Gwtf
 
       read_item = JSON.parse(File.read(@file))
 
-      @item.merge!(read_item)
+      merge!(read_item)
     end
 
     def backup_dir
@@ -32,7 +40,7 @@ module Gwtf
     end
 
     def save(backup=true)
-      raise "No item_id set, cannot save item" unless @item["item_id"]
+      raise "No item_id set, cannot save item" unless item_id
 
       if backup && File.exist?(@file)
         backup_name = File.basename(@file) + "-" + Time.now.to_f.to_s
@@ -45,17 +53,6 @@ module Gwtf
       end
 
       @file
-    end
-
-    def default_item
-      {"description" => nil,
-       "subject" => nil,
-       "created_at" => Time.now,
-       "edited_at" => nil,
-       "closed_at" => nil,
-       "status" => "open",
-       "item_id" => nil,
-       "work_log" => []}
     end
 
     def time_worked
@@ -93,8 +90,8 @@ module Gwtf
       summary.puts "    Subject: %s" % [ subject ]
       summary.puts "     Status: %s" % [ status ]
       summary.puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ]
-      summary.puts "    Created: %s" % [ Time.parse(created_at).strftime("%F %R") ]
-      summary.puts "     Closed: %s" % [ Time.parse(closed_at).strftime("%F %R") ] if closed?
+      summary.puts "    Created: %s" % [ Time.parse(created_at.to_s).strftime("%F %R") ]
+      summary.puts "     Closed: %s" % [ Time.parse(closed_at.to_s).strftime("%F %R") ] if closed?
       summary.puts "         ID: %s" % [ item_id ]
 
       if has_description?
@@ -127,14 +124,10 @@ module Gwtf
       "%5s %-4s%-12s%8s" % [ item_id, compact_flags.join, Time.parse(created_at.to_s).strftime("%F"), subject ]
     end
 
-    def to_hash
-      @item
-    end
-
     def record_work(text, elapsed=0)
       update_property(:edited_at, Time.now)
 
-      @item["work_log"] << {"text" => text, "time" => Time.now, "elapsed" => elapsed}
+      work_log << {"text" => text, "time" => Time.now, "elapsed" => elapsed}
     end
 
     def open
@@ -145,35 +138,6 @@ module Gwtf
     def close
       update_property(:closed_at, Time.now)
       update_property(:status, "closed")
-    end
-
-    def to_json
-      JSON.pretty_generate(@item)
-    end
-
-    def to_yaml
-      @item.to_yaml
-    end
-
-    def update_property(property, value)
-      property = property.to_s
-
-      raise "No such property: #{property}" unless @item.include?(property)
-
-      @item["edited_at"] = Time.now
-      @item[property] = value
-    end
-
-    def [](property)
-      property = property.to_s
-
-      raise "No such property: #{property}" unless @item.include?(property)
-
-      @item[property]
-    end
-
-    def []=(property, value)
-      update_property(property, value)
     end
 
     def schedule_reminer(timespec, recipient, done=false, ifopen=false)
@@ -193,55 +157,6 @@ module Gwtf
         close
         save
       end
-    end
-
-    # simple read from the class:
-    #
-    #   >> i.description
-    #   => "Sample Item"
-    #
-    # method like writes:
-    #
-    #   >> i.description "This is a test"
-    #   => "This is a test"
-    #
-    # assignment
-    #
-    #   >> i.description = "This is a test"
-    #   => "This is a test"
-    #
-    # boolean
-    #
-    #   >> i.description?
-    #   => false
-    #   >> i.description "foo"
-    #   => foo
-    #   >> i.has_description?
-    #   => true
-    #   >> i.has_description
-    #   => true
-    def method_missing(method, *args)
-      method = method.to_s
-
-      if @item.include?(method)
-        if args.empty?
-          return @item[method]
-        else
-          return update_property(method, args.first)
-        end
-
-      elsif method =~ /^has_(.+?)\?*$/
-        return !@item[$1].nil?
-
-      elsif method =~ /^(.+)\?$/
-        return !@item[$1].nil?
-
-      elsif method =~ /^(.+)=$/
-        property = $1
-        return update_property(property, args.first) if @item.include?(property)
-      end
-
-      raise NameError, "undefined local variable or method `#{method}'"
     end
   end
 end
