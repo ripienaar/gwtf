@@ -30,7 +30,7 @@ Adding a task
 
     % gwtf new this is a test task
     Created a new project default in /home/rip/.gwtf.d/default
-       29     2012-03-13  this is a test task
+       29                 this is a test task
 
 You can pass an optional _--edit_ or _-e_ flag to the new command that
 will start your editor configured using EDITOR to edit the long form
@@ -42,11 +42,21 @@ section below for details.
 
     % gwtf new this is a test --remind="now + 1 week" --done --ifopen
     Creating reminder at job for item 30: job 46 at 2012-03-13 20:09
-       30     2012-03-13  this is a test
+       30                 this is a test
 
 The above command will send an email alert 1 week from now if the item has
 not already been completed and mark the item as done after sending the alert,
 more details in the Remind section
+
+You can set a due date for a specific task, tasks with due date will be
+colorized in your list output - yellow for items due today or morrow and
+red for overdue items.  Due dates are shown in the list output etc
+
+     % t new --due="2012/04/07" this is a test
+
+     Project test items: 1 / 11
+
+        77     2012/04/07 test
 
 Logging work for a task
 -----------------------
@@ -88,7 +98,7 @@ By default completed tasks are not shown:
 But you can list all tasks:
 
     % gwtf ls -a
-        0 C   2012-03-10 this is a test task
+        0 C              this is a test task
         1 D   2012-03-10 this is another test task to demonstrate
 
     Items: 1 / 2
