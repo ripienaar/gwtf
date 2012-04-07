@@ -42,8 +42,10 @@ command [:list, :ls, :l] do |c|
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)
 
         if items.item_ids.size > 0
-          text = items.list_text(options[:all], true)
-          puts text if text
+          if text = items.list_text(options[:all], true)
+            puts text
+            puts
+          end
         end
       end
     else
