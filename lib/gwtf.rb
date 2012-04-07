@@ -1,4 +1,5 @@
 module Gwtf
+  require 'objhash'
   require 'gwtf/items'
   require 'gwtf/item'
   require 'gwtf/version'
