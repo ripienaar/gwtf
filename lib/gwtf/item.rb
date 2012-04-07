@@ -5,12 +5,12 @@ module Gwtf
     attr_accessor :file
     attr_reader :project
 
-    property :description, :default => nil
-    property :subject, :default => nil
+    property :description, :default => nil, :validation => String
+    property :subject, :default => nil, :validation => String
     property :closed_at, :default => nil
-    property :status, :default => "open"
-    property :item_id, :default => nil
-    property :work_log, :default => []
+    property :status, :default => "open", :validation => ["open", "closed"]
+    property :item_id, :default => nil, :validation => Integer
+    property :work_log, :default => [], :validation => Array
 
     def initialize(file=nil, project=nil)
       @file = file
