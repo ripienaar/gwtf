@@ -23,10 +23,20 @@ command [:list, :ls, :l] do |c|
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)
         stats = items.stats
 
-        puts "%#{longest_name + 3}s: open: %3d: closed %3d: total: %3d" % [ project, stats["open"], stats["closed"], stats["total"] ] unless stats["open"] == 0
-      end
+        unless stats["open"] == 0
+          msg = "%#{longest_name + 3}s: open: %-3d closed %-3d overdue: %-3d total: %-3d" % [ project, stats["open"], stats["closed"], stats["overdue"], stats["total"] ]
 
+          if stats["overdue"] > 0
+            puts Gwtf.red(msg)
+          elsif stats["due_soon"] > 0
+            puts Gwtf.yellow(msg)
+          else
+            puts Gwtf.green(msg)
+          end
+        end
+      end
       puts
+
     elsif options[:overview]
       Gwtf.projects(global_options[:data]).each do |project|
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)

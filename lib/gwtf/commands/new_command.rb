@@ -1,6 +1,10 @@
 desc 'Create an item'
 arg_name 'Short item description'
 command [:new, :add, :n, :a, :c] do |c|
+  c.desc 'Due date for the item (yyyy/mm/dd)'
+  c.default_value false
+  c.flag [:due]
+
   c.desc 'Invoke EDITOR to provide a long form description'
   c.default_value false
   c.switch [:edit, :e]
@@ -43,6 +47,7 @@ command [:new, :add, :n, :a, :c] do |c|
     item = @items.new_item
     item.subject = subject
     item.description = description if description
+    item.due_date = options[:due] if options[:due]
     item.save
 
     if options[:remind]

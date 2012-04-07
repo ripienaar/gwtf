@@ -79,10 +79,14 @@ module Gwtf
 
     # Returns an array of total, open and closed items for the current project
     def stats
-      count = {"open" => 0, "closed" => 0}
+      count = {"open" => 0, "closed" => 0, "overdue" => 0, "due_soon" => 0, "due_today" => 0}
 
       each_item do |item|
         count[ item.status ] += 1
+
+        count["overdue"] += 1 if item.overdue?
+        count["due_soon"] += 1 if item.days_till_due == 1
+        count["due_today"] += 1 if item.days_till_due == 0
       end
 
       count["total"] = count["open"] + count["closed"]
@@ -110,7 +114,6 @@ module Gwtf
       list.puts "Project %s items: %d / %d" % [ @project, count["open"], count["total"] ]
       list.puts
       list.puts items.string
-      list.puts
 
       list.string
     end

@@ -13,6 +13,7 @@ command [:edit, :vi, :e] do |c|
       begin
         tmp = Tempfile.new("gwtf")
         tmp.puts "Subject: %s" % [ item.subject ]
+        tmp.puts "Due Date: %s" % [ item.due_date ]
         tmp.puts "Description:"
         tmp.puts item.description if item.description
         tmp.rewind
@@ -23,13 +24,28 @@ command [:edit, :vi, :e] do |c|
         tmp.unlink
       end
 
-      if edited_item.split("\n").first =~ /^Subject:\s*(.+)/
+      edited_item = edited_item.split("\n")
+
+      if edited_item.first =~ /^Subject:\s*(.+)/
         item.subject = $1
       else
         raise "Subject is required"
       end
 
-      description = edited_item.split("\n")[2..-1]
+      if edited_item[1] =~ /^Due Date:\s*(.+)/
+        if ["", " "].include?($1)
+          item.due_date = nil
+        else
+          item.due_date = $1
+        end
+      else
+        item.due_date = nil       # if the user just delete the line from the
+        edited_item.insert(1, "") # treat it as removing the due date but insert
+                                  # some blank data in the array to not break the
+                                  # description finding logic
+      end
+
+      description = edited_item[4..-1]
 
       unless [description].flatten.compact.empty?
         item.description = description.join("\n")

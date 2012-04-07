@@ -79,7 +79,11 @@ module ObjHash
 
     return true if validation.nil?
 
-    return false if value.nil? && !validation.nil?
+    # if the value is the default we dont validate it allowing nil
+    # defaults but validation only on assignment of non default value
+    return true if value == objhash_config[property.to_s][:default]
+
+    raise "#{property} should be #{validation}" if value.nil? && !validation.nil?
 
     if validation.is_a?(Symbol)
       case validation
@@ -204,11 +208,8 @@ module ObjHash
         return update_property(method, args.first)
       end
 
-    elsif method =~ /^has_(.+?)\?*$/
-      return !!objhash_values[$1]
-
-    elsif method =~ /^(.+)\?$/
-      return !!objhash_values[$1]
+    elsif method =~ /^(has_)*(.+?)\?$/
+      return !!objhash_values[$2]
 
     elsif method =~ /^(.+)=$/
       property = $1

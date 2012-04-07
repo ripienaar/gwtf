@@ -57,6 +57,30 @@ module Gwtf
     end
   end
 
+  def self.green(msg)
+    if STDOUT.tty?
+      "[1m[32m%s[0m" % [ msg ]
+    else
+      msg
+    end
+  end
+
+  def self.yellow(msg)
+    if STDOUT.tty?
+      "[1m[33m%s[0m" % [ msg ]
+    else
+      msg
+    end
+  end
+
+  def self.red(msg)
+    if STDOUT.tty?
+      "[1m[31m%s[0m" % [ msg ]
+    else
+      msg
+    end
+  end
+
   # borrowed from ohai, thanks Adam.
   def self.seconds_to_human(seconds)
     days = seconds.to_i / 86400

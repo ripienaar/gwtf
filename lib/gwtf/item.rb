@@ -10,6 +10,7 @@ module Gwtf
     property :status, :default => "open", :validation => ["open", "closed"]
     property :item_id, :default => nil, :validation => Integer
     property :work_log, :default => [], :validation => Array
+    property :due_date, :default => nil, :validation => /^20\d\d[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/
     property :closed_at, :default => nil
 
     def initialize(file=nil, project=nil)
@@ -25,6 +26,20 @@ module Gwtf
 
     def closed?
       !open?
+    end
+
+    def overdue?
+      if has_due_date?
+        return !!(days_till_due < 0)
+      else
+        return false
+      end
+    end
+
+    def days_till_due
+      return 1000 unless has_due_date?
+
+      return (Date.parse(due_date) - Date.today).to_i
     end
 
     def load_item
@@ -84,11 +99,27 @@ module Gwtf
       flags
     end
 
+    def colorize_by_due_date(string)
+      if overdue?
+        return Gwtf.red(string)
+      elsif days_till_due <= 1
+        return Gwtf.yellow(string)
+      else
+        return string
+      end
+    end
+
     def summary
       summary = StringIO.new
 
       summary.puts "    Subject: %s" % [ subject ]
       summary.puts "     Status: %s" % [ status ]
+
+      if has_due_date?
+        due = "%s (%d days)" % [ due_date, days_till_due ]
+        summary.puts "   Due Date: %s" % [ colorize_by_due_date(due) ]
+      end
+
       summary.puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ]
       summary.puts "    Created: %s" % [ Time.parse(created_at.to_s).strftime("%F %R") ]
       summary.puts "     Closed: %s" % [ Time.parse(closed_at.to_s).strftime("%F %R") ] if closed?
@@ -121,7 +152,7 @@ module Gwtf
     end
 
     def to_s
-      "%5s %-4s%-12s%8s" % [ item_id, compact_flags.join, Time.parse(created_at.to_s).strftime("%F"), subject ]
+      colorize_by_due_date("%5s %-4s%-10s %s" % [ item_id, compact_flags.join, has_due_date? ? due_date : "", subject ])
     end
 
     def record_work(text, elapsed=0)
