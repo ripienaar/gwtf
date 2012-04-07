@@ -29,7 +29,7 @@ module Gwtf
     end
 
     def overdue?
-      if has_due_date?
+      if has_due_date? && open?
         return !!(days_till_due < 0)
       else
         return false
@@ -86,12 +86,14 @@ module Gwtf
       flag << "closed" if closed?
       flag << "open" if open?
       flag << "descr" if description?
+      flag << "overdue" if overdue?
       flag << work_log.size.to_s unless work_log.empty?
       flag
     end
 
     def compact_flags
       flags = []
+      flags << "O" if overdue?
       flags << "D" if has_description?
       flags << "C" if closed?
       flags << "L" unless work_log.empty?
@@ -102,7 +104,7 @@ module Gwtf
     def colorize_by_due_date(string)
       if overdue?
         return Gwtf.red(string)
-      elsif days_till_due <= 1
+      elsif days_till_due <= 1 && open?
         return Gwtf.yellow(string)
       else
         return string
@@ -115,7 +117,7 @@ module Gwtf
       summary.puts "    Subject: %s" % [ subject ]
       summary.puts "     Status: %s" % [ status ]
 
-      if has_due_date?
+      if has_due_date? && open?
         due = "%s (%d days)" % [ due_date, days_till_due ]
         summary.puts "   Due Date: %s" % [ colorize_by_due_date(due) ]
       end
