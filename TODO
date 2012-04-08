@@ -1,4 +1,0 @@
- - Add garbage collection to delete files for completed tasks and their backups
- - Add short output to the list command to produce a 1 line summary
- - Track open/close counts per project in a json file so the whole tree dont need parsing to get stats
- - Create a better edit command, editing yaml files suck
