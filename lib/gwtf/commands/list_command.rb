@@ -12,6 +12,10 @@ command [:list, :ls, :l] do |c|
   c.default_value false
   c.switch [:overview, :o]
 
+  c.desc 'Show due and overdue items for all projects'
+  c.default_value false
+  c.switch [:due]
+
   c.action do |global_options,options,args|
     if options[:summary]
       projects = Gwtf.projects(global_options[:data])
@@ -37,6 +41,15 @@ command [:list, :ls, :l] do |c|
       end
       puts
 
+    elsif options[:due]
+      Gwtf.projects(global_options[:data]).each do |project|
+        items = Gwtf::Items.new(File.join(global_options[:data], project), project)
+
+        items.each_item do |item|
+          puts "%s: %s" % [ project, item.to_s ] if item.due?
+        end
+      end
+
     elsif options[:overview]
       Gwtf.projects(global_options[:data]).each do |project|
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)
@@ -48,6 +61,7 @@ command [:list, :ls, :l] do |c|
           end
         end
       end
+
     else
       puts
       puts @items.list_text(options[:all])

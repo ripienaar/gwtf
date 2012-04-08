@@ -104,8 +104,9 @@ But you can list all tasks:
     Items: 1 / 2
 
 The _C_ and _D_ flags indicate that item 0 is Closed while item 1 has a
-full Description that you can view with the show command. There is also a
-_L_ flag that indicate an item has work log items.
+full Description that you can view with the show command. There are also
+a _L_ flag that indicate an item has work log items and _O_ that means it's
+overdue.
 
 There's a short summary mode ideal for using in your login scripts:
 

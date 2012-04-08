@@ -36,6 +36,14 @@ module Gwtf
       end
     end
 
+    def due?
+      if has_due_date? && open?
+        return !!(days_till_due <= 1)
+      else
+        return false
+      end
+    end
+
     def days_till_due
       return 1000 unless has_due_date?
 
