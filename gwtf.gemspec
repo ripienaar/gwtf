@@ -19,6 +19,6 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rake')
   s.add_development_dependency('rdoc')
   s.add_dependency 'json'
-  s.add_dependency 'gli', "~>1.5.1"
+  s.add_dependency 'gli', "~>1.6.0"
   s.add_dependency 'boxcar_api', '~> 1.2.0'
 end
