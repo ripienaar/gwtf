@@ -1,3 +1,4 @@
+2012/04/09 - Only show Time Worked in item details if its > 0
 2012/04/09 - Depend on GLI >~ 1.6.0 to get multi line long descriptions
 2012/04/09 - Release 0.6.0
 2012/04/09 - Add remind only tasks via 'gwtf remind --at=tomorrow do something'

@@ -130,7 +130,7 @@ module Gwtf
         summary.puts "   Due Date: %s" % [ colorize_by_due_date(due) ]
       end
 
-      summary.puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ]
+      summary.puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ] if time_worked > 0
       summary.puts "    Created: %s" % [ Time.parse(created_at.to_s).strftime("%F %R") ]
       summary.puts "     Closed: %s" % [ Time.parse(closed_at.to_s).strftime("%F %R") ] if closed?
       summary.puts "         ID: %s" % [ item_id ]
