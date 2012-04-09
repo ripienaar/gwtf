@@ -202,8 +202,40 @@ pass the --ifopen flag when creating the reminder
 To cancel reminders or see which ones you have scheduled use your normal at commands like atq
 and atrm
 
-As of version 0.4.0 you can send notifications to iPhone, iPads and Macs using Boxcar, see
-the BOXCAR.md file in the git repository for details
+You can send notifications to iPhone, iPads and Macs using Boxcar, see the BOXCAR.md file in
+the git repository for details
+
+Adding a reminder only task
+---------------------------
+
+We support reminders by abusing the projects feature creating a project specific to reminders.
+
+To schedule a simple reminder for something do:
+
+    % t remind --at="now +1 hour" do something
+    Creating reminder at job for item 84: job 66 at 2012-04-10 15:11
+        84                do something
+
+This creates an item in the _reminders_ project. It's really just a shortcut to the following
+command:
+
+    % t -p reminders new --remind="now +1 hour" --done --ifopen do something
+
+You can easily cancel a reminder:
+
+   % t -p reminders ls
+   Project reminders items: 1 / 3
+
+       84                do something
+
+   % t -p reminders done 84
+       84 C              test reminder
+
+The _reminders_ project is one that is ignored by the _list --summary_ and _list --overview_
+commands so they do not show up as tasks, but other than that they are just normal items that
+you can manage same as any other task.
+
+These reminders might get recurring features in future
 
 Daily Summary Emails
 ====================

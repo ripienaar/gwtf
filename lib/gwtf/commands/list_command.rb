@@ -22,6 +22,8 @@ command [:list, :ls, :l] do |c|
       longest_name = projects.map{|p| p.length}.max
 
       projects.each_with_index do |project, idx|
+        next if project == "reminders"
+
         puts "Items in all projects:\n\n" if idx == 0
 
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)
@@ -43,6 +45,8 @@ command [:list, :ls, :l] do |c|
 
     elsif options[:due]
       Gwtf.projects(global_options[:data]).each do |project|
+        next if project == "reminders"
+
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)
 
         items.each_item do |item|
@@ -52,6 +56,8 @@ command [:list, :ls, :l] do |c|
 
     elsif options[:overview]
       Gwtf.projects(global_options[:data]).each do |project|
+        next if project == "reminders"
+
         items = Gwtf::Items.new(File.join(global_options[:data], project), project)
 
         if items.item_ids.size > 0

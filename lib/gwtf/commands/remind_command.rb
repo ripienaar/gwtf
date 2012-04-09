@@ -1,13 +1,12 @@
-desc 'Send a reminder about an item via email'
-arg_name 'id [at time specification]'
+desc 'Manage or send reminders about an item'
 long_desc <<EOF
-When run without the --send option this comand will
-add an at() job using the supplied at time specification.
+Schedule a reminder for an existing task: gwtf remind 10 now +5 minutes
 
-The at job will call the same command again this time
-with the --send option that will send an email to you
-or the address specified in --recipient using your system
-mail command
+Send a reminder for an existing task immediately: gwtf remind 10 --send
+
+Add a new item to the reminders project and schedule a reminder: gwtf remind --at="noon tomorrow" have lunch
+
+Time specifications are in at(1) format.
 EOF
 
 command [:remind, :rem] do |c|
@@ -27,17 +26,44 @@ command [:remind, :rem] do |c|
   c.default_value false
   c.switch [:ifopen]
 
+  c.desc "at(1) time specification for the reminder to be sent"
+  c.default_value nil
+  c.flag [:at]
+
   c.action do |global_options,options,args|
     raise "Please supply an item ID to remind about" if args.empty?
 
+    STDOUT.sync
+
     unless options[:send]
-      raise "Please specify a valid at() time specification" unless args.size > 2
+      if args.first =~ /^\d+$/ # got an item id, schedule a reminder
+        unless options[:at]
+          raise "Please specify a valid at(1) time specification with --at after the item id" unless args.size > 2
+          options[:at] = args[1..-1].join(" ")
+        end
 
-      STDOUT.sync
+        print "Creating reminder at job for item #{args.first}: "
 
-      print "Creating reminder at job for item #{args.first}: "
+        @items.load_item(args.first).schedule_reminer(options[:at], options[:recipient], options[:done], options[:ifopen])
 
-      @items.load_item(args.first).schedule_reminer(args[1..-1].join(" "), options[:recipient], options[:done], options[:ifopen])
+      else # new reminder in the 'reminders' project
+        raise "Please specify an at(1) time specification" unless options[:at]
+        raise "Please specify a subject for the reminder item" if args.empty?
+
+        project_dir = File.join(global_options[:data], "reminders")
+        Gwtf::Items.setup(project_dir) unless File.directory?(project_dir)
+
+        items = Gwtf::Items.new(project_dir, "reminders")
+        reminder = items.new_item
+        reminder.subject = args.join(" ")
+
+        print "Creating reminder at job for item #{reminder.item_id}: "
+        reminder.schedule_reminer(options[:at], options[:recipient], true, true)
+
+        reminder.save
+
+        puts reminder.to_s
+      end
     else
       item = @items.load_item(args.first)
 

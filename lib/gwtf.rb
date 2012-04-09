@@ -22,7 +22,7 @@ module Gwtf
   def self.projects(root_dir)
     Dir.entries(root_dir).map do |entry|
       next if entry =~ /^\./
-        next unless File.directory?(File.join(root_dir, entry))
+      next unless File.directory?(File.join(root_dir, entry))
 
       entry
     end.compact.sort
