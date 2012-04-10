@@ -17,6 +17,21 @@ Tasks are stored in simple JSON files and each time you save or edit a
 task a backup of the previous state is made.  There is a simple Ruby
 API for interacting with the tasks list in your own code.
 
+Installation?
+=============
+
+The simplest is to install it using the Gem, you'll get all dependencies
+etc sorted out.
+
+I install gems into my private gem dir so I do not disrupt the system:
+
+    export GEM_HOME=/home/rip/.gem
+    PATH=$PATH:/home/rip/.gem/bin
+    gem install gwtf
+
+this can be done as a normal user, no root required and no changes to your
+OS required to use it.
+
 Basic Usage?
 ============
 
@@ -188,7 +203,7 @@ accept as a time specification:
     % gwtf remind 3 now + 1 week
 
 This will create an at job that will in a week call gwtf asking it to send an email immediately.
-The email will be sent using the normal mail command to your unix user.  You should have a
+The email will be sent using the normal mail command to your Unix user.  You should have a
 .forward file in place to send mail to where you need it otherwise you can invoke the remind
 command with --recipient
 
