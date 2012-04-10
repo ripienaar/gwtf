@@ -1,3 +1,4 @@
+2012/04/10 - When sending reminders to multiple recipients and closing the item only log the work log once
 2012/04/10 - When scheduling a reminder at(1) errors will now raise exceptions and abort item creation
 2012/04/10 - Release 0.6.1
 2012/04/10 - Only show time next to work logs if its > 0s

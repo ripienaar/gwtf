@@ -200,8 +200,10 @@ module Gwtf
       out
     end
 
-    def send_reminder(recipient, mark_as_done, klass)
-      klass.new(self, recipient).notify
+    def send_reminder(recipient, mark_as_done)
+      recipient.split(",").each do |r|
+        Gwtf.notifier_for_address(r.strip).new(self, r.strip).notify
+      end
 
       if mark_as_done
         record_work("Closing item as part of scheduled reminder")
