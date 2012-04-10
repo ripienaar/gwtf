@@ -1,3 +1,6 @@
+2012/04/10 - Release 0.6.1
+2012/04/10 - Only show time next to work logs if its > 0s
+2012/04/10 - When setting a reminder add a worklog item indicating the specification and at(1) output
 2012/04/09 - Only show Time Worked in item details if its > 0
 2012/04/09 - Depend on GLI >~ 1.6.0 to get multi line long descriptions
 2012/04/09 - Release 0.6.0

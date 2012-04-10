@@ -153,7 +153,11 @@ module Gwtf
         summary.puts "Work Log: " if idx == 0
 
         # we used to automatically embed this into the description which was dumb
-        elapsed = "(%s)" % [Gwtf.seconds_to_human(log["elapsed"])] unless log["text"] =~ /\(.+?\)$/
+        if log["elapsed"] > 0
+          elapsed = "(%s)" % [Gwtf.seconds_to_human(log["elapsed"])] unless log["text"] =~ /\(.+?\)$/
+        else
+          elapsed = ""
+        end
 
         summary.puts "%27s %s %s" % [Time.parse(log["time"]).strftime("%F %R"), log["text"], elapsed]
       end
@@ -187,7 +191,11 @@ module Gwtf
       command_args << "--done" if done
       command_args << "--ifopen" if ifopen
 
-      system "echo gwtf --project='%s' remind %s %s | at %s" % [ @project, command_args.join(" "), item_id, timespec]
+      command = "echo gwtf --project='%s' remind %s %s | at %s 2>&1" % [ @project, command_args.join(" "), item_id, timespec]
+      out = %x[#{command}]
+
+      puts out
+      out
     end
 
     def send_reminder(recipient, mark_as_done, klass)

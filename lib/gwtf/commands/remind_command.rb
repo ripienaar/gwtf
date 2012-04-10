@@ -58,9 +58,9 @@ command [:remind, :rem] do |c|
         reminder.subject = args.join(" ")
 
         print "Creating reminder at job for item #{reminder.item_id}: "
-        reminder.schedule_reminer(options[:at], options[:recipient], true, true)
+        out = reminder.schedule_reminer(options[:at], options[:recipient], true, true)
 
-        reminder.record_work "Scheduled reminder for %s" % [ options[:at] ]
+        reminder.record_work "Scheduled reminder for %s: %s" % [ options[:at], out.chomp ]
 
         reminder.save
 
