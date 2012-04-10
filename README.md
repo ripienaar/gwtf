@@ -25,9 +25,9 @@ etc sorted out.
 
 I install gems into my private gem dir so I do not disrupt the system:
 
-    export GEM_HOME=/home/rip/.gem
-    PATH=$PATH:/home/rip/.gem/bin
-    gem install gwtf
+    % export GEM_HOME=/home/rip/.gem
+    % PATH=$PATH:/home/rip/.gem/bin
+    % gem install gwtf
 
 this can be done as a normal user, no root required and no changes to your
 OS required to use it.
@@ -207,10 +207,6 @@ The email will be sent using the normal mail command to your Unix user.  You sho
 .forward file in place to send mail to where you need it otherwise you can invoke the remind
 command with --recipient
 
-If all you really want is to schedule a reminder for some future task you pass --done to the
-remind command which will then mark your item done after reminding you about it.  A note of
-the action will be added to the work log.
-
 If you want to set a reminder for a future time but only if the item is still open by that time
 pass the --ifopen flag when creating the reminder
 
@@ -234,16 +230,16 @@ To schedule a simple reminder for something do:
 This creates an item in the _reminders_ project. It's really just a shortcut to the following
 command:
 
-    % gwtf -p reminders new --remind="now +1 hour" --done --ifopen do something
+     % gwtf -p reminders new --remind="now +1 hour" --done --ifopen do something
 
 You can easily cancel a reminder:
 
-   % gwtf -p reminders ls
-   Project reminders items: 1 / 3
+    % gwtf -p reminders ls
+    Project reminders items: 1 / 3
 
        84                do something
 
-   % gwtf -p reminders done 84
+    % gwtf -p reminders done 84
        84 C              test reminder
 
 The _reminders_ project is one that is ignored by the _list --summary_ and _list --overview_
