@@ -33,12 +33,12 @@ command [:remind, :rem] do |c|
   c.action do |global_options,options,args|
     raise "Please supply an item ID to remind about" if args.empty?
 
-    STDOUT.sync
+    STDOUT.sync = true
 
     unless options[:send]
       if args.first =~ /^\d+$/ # got an item id, schedule a reminder
         unless options[:at]
-          raise "Please specify a valid at(1) time specification with --at after the item id" unless args.size > 2
+          raise "Please specify a valid at(1) time specification with --at after the item id" unless args.size >= 2
           options[:at] = args[1..-1].join(" ")
         end
 

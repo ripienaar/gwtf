@@ -48,7 +48,6 @@ command [:new, :add, :n, :a, :c] do |c|
     item.subject = subject
     item.description = description if description
     item.due_date = options[:due] if options[:due]
-    item.save
 
     if options[:remind]
       STDOUT.sync
@@ -57,6 +56,8 @@ command [:new, :add, :n, :a, :c] do |c|
 
       item.schedule_reminer(options[:remind], options[:recipient], options[:done], options[:ifopen])
     end
+
+    item.save
 
     puts item.to_s
   end

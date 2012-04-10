@@ -1,3 +1,4 @@
+2012/04/10 - When scheduling a reminder at(1) errors will now raise exceptions and abort item creation
 2012/04/10 - Release 0.6.1
 2012/04/10 - Only show time next to work logs if its > 0s
 2012/04/10 - When setting a reminder add a worklog item indicating the specification and at(1) output

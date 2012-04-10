@@ -52,7 +52,7 @@ You can set a due date for a specific task, tasks with due date will be
 colorized in your list output - yellow for items due today or morrow and
 red for overdue items.  Due dates are shown in the list output etc
 
-     % t new --due="2012/04/07" this is a test
+     % gwtf new --due="2012/04/07" this is a test
 
      Project test items: 1 / 11
 
@@ -212,23 +212,23 @@ We support reminders by abusing the projects feature creating a project specific
 
 To schedule a simple reminder for something do:
 
-    % t remind --at="now +1 hour" do something
+    % gwtf remind --at="now +1 hour" do something
     Creating reminder at job for item 84: job 66 at 2012-04-10 15:11
         84                do something
 
 This creates an item in the _reminders_ project. It's really just a shortcut to the following
 command:
 
-    % t -p reminders new --remind="now +1 hour" --done --ifopen do something
+    % gwtf -p reminders new --remind="now +1 hour" --done --ifopen do something
 
 You can easily cancel a reminder:
 
-   % t -p reminders ls
+   % gwtf -p reminders ls
    Project reminders items: 1 / 3
 
        84                do something
 
-   % t -p reminders done 84
+   % gwtf -p reminders done 84
        84 C              test reminder
 
 The _reminders_ project is one that is ignored by the _list --summary_ and _list --overview_

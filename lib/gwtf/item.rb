@@ -194,6 +194,8 @@ module Gwtf
       command = "echo gwtf --project='%s' remind %s %s | at %s 2>&1" % [ @project, command_args.join(" "), item_id, timespec]
       out = %x[#{command}]
 
+      raise "Failed to add at(1) job: %s" % [ out ] unless $? == 0
+
       puts out
       out
     end
