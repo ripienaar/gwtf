@@ -20,6 +20,43 @@ module Gwtf
       end
     end
 
+    # overview text of open (or all) items in all projects
+    def self.overview_text(datadir, all=false)
+      overview = StringIO.new
+
+      Gwtf.projects(datadir).each do |project|
+        next if project == "reminders"
+
+        items = Gwtf::Items.new(File.join(datadir, project), project)
+
+        if items.item_ids.size > 0
+          if text = items.list_text(all, true)
+            overview.puts text
+            overview.puts
+          end
+        end
+      end
+
+      overview.string
+    end
+
+    # overview text of all due items in all projects
+    def self.due_text(datadir)
+      overview = StringIO.new
+
+      Gwtf.projects(datadir).each do |project|
+        next if project == "reminders"
+
+        items = Gwtf::Items.new(File.join(datadir, project), project)
+
+        items.each_item do |item|
+          overview.puts "%s: %s" % [ project, item.to_s ] if item.due?
+        end
+      end
+
+      overview.string
+    end
+
     def initialize(data_dir, project)
       raise "Data directory #{data_dir} does not exist" unless File.directory?(data_dir)
 

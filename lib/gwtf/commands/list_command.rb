@@ -55,18 +55,7 @@ command [:list, :ls, :l] do |c|
       end
 
     elsif options[:overview]
-      Gwtf.projects(global_options[:data]).each do |project|
-        next if project == "reminders"
-
-        items = Gwtf::Items.new(File.join(global_options[:data], project), project)
-
-        if items.item_ids.size > 0
-          if text = items.list_text(options[:all], true)
-            puts text
-            puts
-          end
-        end
-      end
+      puts Gwtf::Items.overview_text(global_options[:data], options[:all])
 
     else
       puts

@@ -186,12 +186,12 @@ module Gwtf
     end
 
     def schedule_reminer(timespec, recipient, done=false, ifopen=false)
-      command_args = ["--send"]
+      command_args = ["--remind"]
       command_args << "--recipient=%s" % [ recipient ]
       command_args << "--done" if done
       command_args << "--ifopen" if ifopen
 
-      command = "echo gwtf --project='%s' remind %s %s | at %s 2>&1" % [ @project, command_args.join(" "), item_id, timespec]
+      command = "echo gwtf --project='%s' email %s %s | at %s 2>&1" % [ @project, command_args.join(" "), item_id, timespec]
       out = %x[#{command}]
 
       raise "Failed to add at(1) job: %s" % [ out ] unless $? == 0

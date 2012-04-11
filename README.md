@@ -251,13 +251,28 @@ These reminders might get recurring features in future
 Daily Summary Emails
 ====================
 
-There is no built in mailer for daily summary mails but they are very easy to achieve with cron
-and the mail command:
+There is a helper to generate various emails about your items, you should call this from your
+normal cron daemon
 
-    @daily gwtf ls --overview | mail -s "Daily Summary of Tasks" you@your.com
+To send a reminder about item 10, only if it's not already marked as done and mark it done
+once the notification has been sent:
 
-Put that in your users crontab with _crontab -e_ and you should get daily mails listing all
-outstanding tasks for all projects.
+    % gwtf notify --remind=10 --ifopen --done
+
+To send a email with a overview similar to the _list --overview_ command:
+
+    % gwtf notify --overview
+
+And finally to send a list of any due and overdue items - no mail will be sent if nothig is due:
+
+    % gwtf notify --due
+
+The first command supports sending reminders to Boxcar, see the BOXCAR.md in the git repository
+the rest of the commands only support email.
+
+You can specify multiple recipients using _--recipient_ in a command seperated list:
+
+   % gwtf notify --recipient="you@your.com,boxcar://you@your.com" --remind-10
 
 Default Project, Data Dir or Email Recipient?
 =============================================

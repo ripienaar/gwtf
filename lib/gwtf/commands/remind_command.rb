@@ -67,6 +67,7 @@ command [:remind, :rem] do |c|
         puts reminder.to_s
       end
     else
+      # This is deprecated use 'gwtf email --remind 10' instead
       item = @items.load_item(args.first)
 
       unless options[:ifopen] && item.closed?

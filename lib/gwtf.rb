@@ -4,6 +4,7 @@ module Gwtf
   require 'gwtf/item'
   require 'gwtf/version'
   require 'gwtf/notifier/base'
+  require 'gwtf/notifier/email'
   require 'json'
   require 'yaml'
   require 'fileutils'
@@ -11,6 +12,12 @@ module Gwtf
   require 'uri'
   require 'time'
   require 'readline'
+
+  @@color = true
+
+  def self.color=(value)
+    @@color = value
+  end
 
   def self.each_command
     commands_dir = File.join(File.dirname(__FILE__), "gwtf", "commands")
@@ -28,12 +35,22 @@ module Gwtf
     end.compact.sort
   end
 
-  def self.notifier_for_address(address)
+  def self.protocol_for_address(address)
     uri = URI.parse(address)
 
     case uri.scheme
       when nil, "email"
-        require 'gwtf/notifier/email'
+        return "email"
+      else
+        return uri.scheme
+    end
+  end
+
+  def self.notifier_for_address(address)
+    protocol = protocol_for_address(address)
+
+    case protocol_for_address(address)
+      when "email"
         return Notifier::Email
       when "boxcar"
         gem 'boxcar_api', '>= 1.2.0'
@@ -42,7 +59,7 @@ module Gwtf
 
         return Notifier::Boxcar
       else
-        raise "Do not know how to handle addresses of type #{uri.scheme} for #{address}"
+        raise "Do not know how to handle addresses of type #{protocol} for #{address}"
     end
   end
 
@@ -58,7 +75,7 @@ module Gwtf
   end
 
   def self.green(msg)
-    if STDOUT.tty?
+    if STDOUT.tty? && @@color
       "[1m[32m%s[0m" % [ msg ]
     else
       msg
@@ -66,7 +83,7 @@ module Gwtf
   end
 
   def self.yellow(msg)
-    if STDOUT.tty?
+    if STDOUT.tty? && @@color
       "[1m[33m%s[0m" % [ msg ]
     else
       msg
@@ -74,7 +91,7 @@ module Gwtf
   end
 
   def self.red(msg)
-    if STDOUT.tty?
+    if STDOUT.tty? && @@color
       "[1m[31m%s[0m" % [ msg ]
     else
       msg
