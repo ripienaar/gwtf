@@ -214,7 +214,8 @@ To cancel reminders or see which ones you have scheduled use your normal at comm
 and atrm
 
 You can send notifications to iPhone, iPads and Macs using Boxcar, see the BOXCAR.md file in
-the git repository for details
+the git repository for details. Notfio is also supported for Android users, see the NOTIFO.md
+file for details.
 
 Adding a reminder only task
 ---------------------------
