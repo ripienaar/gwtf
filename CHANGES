@@ -1,3 +1,5 @@
+2012/04/12 - When scheduling reminders set the date the reminder will be sent as the due date of the item
+2012/04/12 - Make 'close' and alias to the 'done' command
 2012/04/11 - Release 0.7.0
 2012/04/11 - Add a new notify command that handles various types of notification
 2012/04/10 - When sending reminders to multiple recipients and closing the item only log the work log once

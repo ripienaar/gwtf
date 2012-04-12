@@ -1,6 +1,6 @@
 desc 'Mark an item as done'
 arg_name 'Item id'
-command [:done, :d] do |c|
+command [:done, :close, :d] do |c|
   c.action do |global_options,options,args|
     raise "Please specify an item ID to mark as done" if args.empty?
 

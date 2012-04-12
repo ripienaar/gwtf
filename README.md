@@ -225,7 +225,11 @@ To schedule a simple reminder for something do:
 
     % gwtf remind --at="now +1 hour" do something
     Creating reminder at job for item 84: job 66 at 2012-04-10 15:11
-        84                do something
+       103 L   2012-04-13 do something
+
+
+Reminder items will have their due date set to the date the reminder will be sent and have a
+work log entry witht he output from at(1)
 
 This creates an item in the _reminders_ project. It's really just a shortcut to the following
 command:
@@ -237,10 +241,10 @@ You can easily cancel a reminder:
     % gwtf -p reminders ls
     Project reminders items: 1 / 3
 
-       84                do something
+       103 L   2012-04-13 do something
 
     % gwtf -p reminders done 84
-       84 C              test reminder
+       103 CL  2012-04-13 do something
 
 The _reminders_ project is one that is ignored by the _list --summary_ and _list --overview_
 commands so they do not show up as tasks, but other than that they are just normal items that

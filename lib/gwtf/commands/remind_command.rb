@@ -60,6 +60,10 @@ command [:remind, :rem] do |c|
         print "Creating reminder at job for item #{reminder.item_id}: "
         out = reminder.schedule_reminer(options[:at], options[:recipient], true, true)
 
+        if out =~ /job (\d+) at (\d+-\d+-\d+)\s/
+          reminder.due_date = $2
+        end
+
         reminder.record_work "Scheduled reminder for %s: %s" % [ options[:at], out.chomp ]
 
         reminder.save
