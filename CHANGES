@@ -1,4 +1,6 @@
-2012/04/12 - Release 0.7.2
+2012/04/13 - Release 0.7.3
+2012/04/13 - Remove notifo from the gem file as it needs a HTTParty that clashes with Boxcar
+2012/04/13 - Release 0.7.2
 2012/04/13 - Fix scheduling of reminders that were using the incorrect command line to the notify command
 2012/04/13 - When scheduling reminders for an item store the at(1) job id in the item to enable future management of that
 2012/04/13 - Add Notifo support - thanks @cornet
