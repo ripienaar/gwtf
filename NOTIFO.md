@@ -14,8 +14,8 @@ Once you've done that you can configure gwtf with your
 API access details in _~/.notifo_ a sample file is:
 
     ---
-	:apiuser: cornet
-	:apisecret: abcdef1234567890abcdef123456789abcdef1234
+    :apiuser: cornet
+    :apisecret: abcdef1234567890abcdef123456789abcdef1234
     :sender: gwtf
 
 Supply your own apikey and apiuser. Send alerts by using the
