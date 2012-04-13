@@ -58,6 +58,12 @@ module Gwtf
         require 'gwtf/notifier/boxcar'
 
         return Notifier::Boxcar
+      when "notifo"
+        gem 'notifo'
+        require 'notifo'
+        require 'gwtf/notifier/notifo'
+
+        return Notifier::Notifo
       else
         raise "Do not know how to handle addresses of type #{protocol} for #{address}"
     end
