@@ -8,18 +8,17 @@ module Gwtf
 
         config = YAML.load_file(config_file)
 
-        p config
-
         raise "Config needs to be a hash" unless config.is_a?(Hash)
         raise "Config must include :apiuser" unless config[:apiuser]
         raise "Config must include :apisecret" unless config[:apisecret]
+        raise "Config must include :sender" unless config[:sender]
 
         uri = URI.parse(recipient)
 
         raise "Recipient must have a user portion" unless uri.user
         raise "Recipient must have a host portion" unless uri.host
 
-        notifo = ::Notifo.new(:username => config[:apiuser], :secret => config[:apisecret])
+        notifo = ::Notifo.new(config[:apiuser], config[:apisecret])
 
         if item.project == "default"
           msg = "%s: %s" % [ item.item_id, item.subject ]
@@ -27,7 +26,8 @@ module Gwtf
           msg = "%s:%s: %s" % [ item.project, item.item_id, item.subject ]
         end
 
-        notifo.send_notification(:to => uri.user, :msg =>  msg)
+        # notifo gem doesn't return anything on failure
+        notifo.post(uri.user, msg, config[:sender])
 
       end
     end
