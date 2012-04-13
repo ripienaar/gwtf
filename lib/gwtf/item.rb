@@ -5,13 +5,14 @@ module Gwtf
     attr_accessor :file
     attr_reader :project
 
-    property :description, :default => nil, :validation => String
-    property :subject, :default => nil, :validation => String
-    property :status, :default => "open", :validation => ["open", "closed"]
-    property :item_id, :default => nil, :validation => Integer
-    property :work_log, :default => [], :validation => Array
-    property :due_date, :default => nil, :validation => /^20\d\d[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/
-    property :closed_at, :default => nil
+    property :description, :default => nil,    :validation => String
+    property :subject,     :default => nil,    :validation => String
+    property :status,      :default => "open", :validation => ["open", "closed"]
+    property :item_id,     :default => nil,    :validation => Integer
+    property :work_log,    :default => [],     :validation => Array
+    property :due_date,    :default => nil,    :validation => /^20\d\d[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/
+    property :at_job,      :default => nil,    :validation => Integer
+    property :closed_at,   :default => nil
 
     def initialize(file=nil, project=nil)
       @file = file
@@ -133,6 +134,7 @@ module Gwtf
       summary.puts "Time Worked: %s" % [ Gwtf.seconds_to_human(time_worked) ] if time_worked > 0
       summary.puts "    Created: %s" % [ Time.parse(created_at.to_s).strftime("%F %R") ]
       summary.puts "     Closed: %s" % [ Time.parse(closed_at.to_s).strftime("%F %R") ] if closed?
+      summary.puts "     At Job: %d" % [ at_job ] if at_job?
       summary.puts "         ID: %s" % [ item_id ]
 
       if has_description?
@@ -191,10 +193,16 @@ module Gwtf
       command_args << "--done" if done
       command_args << "--ifopen" if ifopen
 
-      command = "echo gwtf --project='%s' email %s %s | at %s 2>&1" % [ @project, command_args.join(" "), item_id, timespec]
+      command = "echo gwtf --project='%s' notify %s %s | at %s 2>&1" % [ @project, command_args.join(" "), item_id, timespec]
       out = %x[#{command}]
 
       raise "Failed to add at(1) job: %s" % [ out ] unless $? == 0
+
+      if out =~ /^job (\d+?) at \d/
+        update_property(:at_job, Integer($1))
+      else
+        raise "Could not parse at(1) output for jobid: #{out}"
+      end
 
       puts out
       out

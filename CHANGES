@@ -1,3 +1,4 @@
+2012/04/13 - When scheduling reminders for an item store the at(1) job id in the item to enable future management of that
 2012/04/13 - Add Notifo support - thanks @cornet
 2012/04/12 - Release 0.7.1
 2012/04/12 - When scheduling reminders set the date the reminder will be sent as the due date of the item
