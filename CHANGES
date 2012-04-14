@@ -1,3 +1,4 @@
+2012/04/14 - Attempt to parse at and due date time specs with Chronic (https://github.com/mojombo/chronic) else pass onto at(1)
 2012/04/13 - Release 0.7.3
 2012/04/13 - Remove notifo from the gem file as it needs a HTTParty that clashes with Boxcar
 2012/04/13 - Release 0.7.2

@@ -61,7 +61,7 @@ command [:remind, :rem] do |c|
         out = reminder.schedule_reminer(options[:at], options[:recipient], true, true)
 
         if out =~ /job (\d+) at (\d+-\d+-\d+)\s/
-          reminder.due_date = $2
+          reminder.due_date = reminder.date_to_due_date($2)
         end
 
         reminder.record_work "Scheduled reminder for %s: %s" % [ options[:at], out.chomp ]

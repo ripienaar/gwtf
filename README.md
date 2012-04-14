@@ -17,6 +17,9 @@ Tasks are stored in simple JSON files and each time you save or edit a
 task a backup of the previous state is made.  There is a simple Ruby
 API for interacting with the tasks list in your own code.
 
+Time and Date specifications are where possible done using flexible
+natural language parsing provided by a combination Chronic and at(1)
+
 Installation?
 =============
 
@@ -72,6 +75,12 @@ red for overdue items.  Due dates are shown in the list output etc
      Project test items: 1 / 11
 
         77     2012/04/07 test
+
+The due date can be specificed in formats supported by [Chronic](https://github.com/mojombo/chronic)
+
+Reminders can be specificed using the Chronic, in the case where Chronic
+to parse it will fall back to at(1) parsing allowing arguments like "now +1 week"
+in addition to what Chronic supports.
 
 Logging work for a task
 -----------------------

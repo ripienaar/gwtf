@@ -12,8 +12,13 @@ module Gwtf
   require 'uri'
   require 'time'
   require 'readline'
+  require 'chronic'
 
   @@color = true
+
+  def self.parse_time(timespec)
+    Chronic.parse(timespec, :ambiguous_time_range => 8)
+  end
 
   def self.color=(value)
     @@color = value

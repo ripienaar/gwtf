@@ -47,7 +47,7 @@ command [:new, :add, :n, :a, :c] do |c|
     item = @items.new_item
     item.subject = subject
     item.description = description if description
-    item.due_date = options[:due] if options[:due]
+    item.due_date = item.date_to_due_date(options[:due]) if options[:due]
 
     if options[:remind]
       STDOUT.sync

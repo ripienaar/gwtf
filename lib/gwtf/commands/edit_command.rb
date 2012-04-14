@@ -36,7 +36,7 @@ command [:edit, :vi, :e] do |c|
         if ["", " "].include?($1)
           item.due_date = nil
         else
-          item.due_date = $1
+          item.due_date = item.date_to_due_date($1)
         end
       else
         item.due_date = nil       # if the user just delete the line from the

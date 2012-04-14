@@ -21,6 +21,12 @@ module Gwtf
       load_item if file
     end
 
+    def date_to_due_date(timespec)
+      Gwtf.parse_time(timespec).strftime("%Y-%m-%d")
+    rescue
+      raise "Could not parse time specification #{timespec}"
+    end
+
     def open?
       status == "open"
     end
@@ -192,6 +198,11 @@ module Gwtf
       command_args << "--recipient=%s" % [ recipient ]
       command_args << "--done" if done
       command_args << "--ifopen" if ifopen
+
+      # attempt to parse the timespec with Chronic, if it cant then pass it onto at verbatim
+      if time = Gwtf.parse_time(timespec)
+        timespec = "-t %s" % [time.strftime("%Y%m%d%H%M")]
+      end
 
       command = "echo gwtf --project='%s' notify %s | at %s 2>&1" % [ @project, command_args.join(" "), timespec]
       out = %x[#{command}]
