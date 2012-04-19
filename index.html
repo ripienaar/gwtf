@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Gwtf by ripienaar</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Gwtf</h1>
+        <h2>A Unix CLI focussed TODO manager with work logging features</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/ripienaar/gwtf/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/ripienaar/gwtf/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/ripienaar/gwtf" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>What?</h1>
+
+<p>Go With The Flow is a Unix CLI orientated todo/task tracker.</p>
+
+<p>Each todo item has a short description, a optional long description,
+a status and a work log.</p>
+
+<p>It supports different projects with unique lists of tasks and can track
+time worked per task either through specifically supplying time worked
+or via sub-shells.</p>
+
+<p>gwtf is written using the excellent gli gem so it behaves a lot like
+the git command line.</p>
+
+<p>Tasks are stored in simple JSON files and each time you save or edit a
+task a backup of the previous state is made.  There is a simple Ruby
+API for interacting with the tasks list in your own code.</p>
+
+<p>Time and Date specifications are where possible done using flexible
+natural language parsing provided by a combination Chronic and at(1)</p>
+
+<h1>Installation?</h1>
+
+<p>The simplest is to install it using the Gem, you'll get all dependencies
+etc sorted out.</p>
+
+<p>I install gems into my private gem dir so I do not disrupt the system:</p>
+
+<pre><code>% export GEM_HOME=/home/rip/.gem
+% PATH=$PATH:/home/rip/.gem/bin
+% gem install gwtf
+</code></pre>
+
+<p>this can be done as a normal user, no root required and no changes to your
+OS required to use it.</p>
+
+<h1>Basic Usage?</h1>
+
+<p>By default tasks are written to ~/.gwtf.d/ directory, sub directories
+per project exist under this directory.</p>
+
+<p>I alias gwtf to the <em>t</em> command using my shell alias facilities.</p>
+
+<h2>Adding a task</h2>
+
+<pre><code>% gwtf new this is a test task
+Created a new project default in /home/rip/.gwtf.d/default
+   29                 this is a test task
+</code></pre>
+
+<p>You can pass an optional <em>--edit</em> or <em>-e</em> flag to the new command that
+will start your editor configured using EDITOR to edit the long form
+description of a task</p>
+
+<p>When creating an item you can pass the same arguments as to the remind
+command which will schedule an emailed reminder.  See the <em>Reminders</em>
+section below for details.</p>
+
+<pre><code>% gwtf new this is a test --remind="now + 1 week" --done --ifopen
+Creating reminder at job for item 30: job 46 at 2012-03-13 20:09
+   30                 this is a test
+</code></pre>
+
+<p>The above command will send an email alert 1 week from now if the item has
+not already been completed and mark the item as done after sending the alert,
+more details in the Remind section</p>
+
+<p>You can set a due date for a specific task, tasks with due date will be
+colorized in your list output - yellow for items due today or morrow and
+red for overdue items.  Due dates are shown in the list output etc</p>
+
+<pre><code> % gwtf new --due="2012/04/07" this is a test
+
+ Project test items: 1 / 11
+
+    77     2012/04/07 test
+</code></pre>
+
+<p>The due date can be specificed in formats supported by <a href="https://github.com/mojombo/chronic">Chronic</a></p>
+
+<p>Reminders can be specificed using the Chronic, in the case where Chronic
+to parse it will fall back to at(1) parsing allowing arguments like "now +1 week"
+in addition to what Chronic supports.</p>
+
+<h2>Logging work for a task</h2>
+
+<p>Each task has a work log that you can write to:</p>
+
+<pre><code>% gwtf log 0 "Create a README file" -m 20
+Logged 'Create a README file' against item 0 for 20 minutes 0 seconds
+</code></pre>
+
+<h2>Viewing a task</h2>
+
+<pre><code>% gwtf show 0
+         ID: 0
+    Subject: this is a test task
+     Status: open
+Time Worked: 20 minutes 0 seconds
+    Created: 03/10/12 21:23
+
+Work Log:
+             03/10/12 21:25 Create a README file
+</code></pre>
+
+<h2>Completing a task</h2>
+
+<pre><code>% gwtf done 0
+Marked item 0 as done
+</code></pre>
+
+<h2>List of tasks</h2>
+
+<p>By default completed tasks are not shown:</p>
+
+<pre><code>% gwtf list
+    1 D   2012-03-10 this is another test task to demonstrate
+
+Items: 1 / 2
+</code></pre>
+
+<p>But you can list all tasks:</p>
+
+<pre><code>% gwtf ls -a
+    0 C              this is a test task
+    1 D   2012-03-10 this is another test task to demonstrate
+
+Items: 1 / 2
+</code></pre>
+
+<p>The <em>C</em> and <em>D</em> flags indicate that item 0 is Closed while item 1 has a
+full Description that you can view with the show command. There are also
+a <em>L</em> flag that indicate an item has work log items and <em>O</em> that means it's
+overdue.</p>
+
+<p>There's a short summary mode ideal for using in your login scripts:</p>
+
+<pre><code>% gwtf ls --summary
+Items in all projects:
+
+   gwtf: open:   5: closed   4: total:   9
+   test: open:   0: closed   4: total:   4
+</code></pre>
+
+<h2>Editing a task</h2>
+
+<p>You can edit a task subject right on the command line:</p>
+
+<pre><code>% gwtf edit 1 /another/the first
+1 (open): this is the first test task to demonstrate
+</code></pre>
+
+<p>If you leave off the replacement logic it will edit the item using your
+editor as defined in EDITOR</p>
+
+<h2>Logging work done interactively?</h2>
+
+<p>If you're working on some code you can track the time spent working
+on it using gwtf:</p>
+
+<pre><code>% gwtf new add a readme file
+Item 3 saved
+
+% gwtf shell 3
+Starting work on item 3, exit to record the action and time
+%
+</code></pre>
+
+<p>This shell will have GWTF_ITEM, GWTF_PROJECT and GWTF_SUBJECT environment
+variables set for use in your prompt or shell script.</p>
+
+<p>Now you can work in this shell and once you're done simply exit it:</p>
+
+<pre><code>% exit
+Optional description for work log (start with done! to close):: First stab at writing a readme file
+Recorded 91.6566 seconds of work against item 3
+</code></pre>
+
+<p>Your log will be visible in the show command along with a total work time
+for the task:</p>
+
+<pre><code>         ID: 3
+    Subject: add a readme file
+     Status: open
+Time Worked: 1 minutes 32 seconds
+    Created: 03/10/12 21:41
+
+Work Log:
+             03/10/12 21:43 First stab at writing a readme file (1 minutes 32 seconds)
+</code></pre>
+
+<p>You can pass <em>--pre</em> and <em>--post</em> flags to the shell command that will run shell commands
+before and after the subshell, this is good for tweaking your tmux status bar while working
+on tasks for example</p>
+
+<h1>Projects?</h1>
+
+<p>There is a very simplistic project model that simply creates a new
+set of tasks in a different sub-directory off the top directory.</p>
+
+<pre><code>% gwtf --project=acme new this is a different project
+Created a new project acme in /home/rip/.gwtf.d/acme
+Item 2 saved
+</code></pre>
+
+<p>Note that item numbers a unique for the entire installation to avoid
+confusion due to overlapping item numbers.</p>
+
+<h1>Reminders</h1>
+
+<p>To facilitate reminders by email we use your at system and the normal mail command present
+in most Unix systems.  To schedule a reminder for an item you can use anything your at will
+accept as a time specification:</p>
+
+<pre><code>% gwtf remind 3 now + 1 week
+</code></pre>
+
+<p>This will create an at job that will in a week call gwtf asking it to send an email immediately.
+The email will be sent using the normal mail command to your Unix user.  You should have a
+.forward file in place to send mail to where you need it otherwise you can invoke the remind
+command with --recipient</p>
+
+<p>If you want to set a reminder for a future time but only if the item is still open by that time
+pass the --ifopen flag when creating the reminder</p>
+
+<p>To cancel reminders or see which ones you have scheduled use your normal at commands like atq
+and atrm</p>
+
+<p>You can send notifications to iPhone, iPads and Macs using Boxcar, see the BOXCAR.md file in
+the git repository for details. Notfio is also supported for Android users, see the NOTIFO.md
+file for details.</p>
+
+<h2>Adding a reminder only task</h2>
+
+<p>We support reminders by abusing the projects feature creating a project specific to reminders.</p>
+
+<p>To schedule a simple reminder for something do:</p>
+
+<pre><code>% gwtf remind --at="now +1 hour" do something
+Creating reminder at job for item 84: job 66 at 2012-04-10 15:11
+   103 L   2012-04-13 do something
+</code></pre>
+
+<p>Reminder items will have their due date set to the date the reminder will be sent and have a
+work log entry witht he output from at(1)</p>
+
+<p>This creates an item in the <em>reminders</em> project. It's really just a shortcut to the following
+command:</p>
+
+<pre><code> % gwtf -p reminders new --remind="now +1 hour" --done --ifopen do something
+</code></pre>
+
+<p>You can easily cancel a reminder:</p>
+
+<pre><code>% gwtf -p reminders ls
+Project reminders items: 1 / 3
+
+   103 L   2012-04-13 do something
+
+% gwtf -p reminders done 84
+   103 CL  2012-04-13 do something
+</code></pre>
+
+<p>The <em>reminders</em> project is one that is ignored by the <em>list --summary</em> and <em>list --overview</em>
+commands so they do not show up as tasks, but other than that they are just normal items that
+you can manage same as any other task.</p>
+
+<p>These reminders might get recurring features in future</p>
+
+<h1>Daily Summary Emails</h1>
+
+<p>There is a helper to generate various emails about your items, you should call this from your
+normal cron daemon</p>
+
+<p>To send a reminder about item 10, only if it's not already marked as done and mark it done
+once the notification has been sent:</p>
+
+<pre><code>% gwtf notify --remind=10 --ifopen --done
+</code></pre>
+
+<p>To send a email with a overview similar to the <em>list --overview</em> command:</p>
+
+<pre><code>% gwtf notify --overview
+</code></pre>
+
+<p>And finally to send a list of any due and overdue items - no mail will be sent if nothig is due:</p>
+
+<pre><code>% gwtf notify --due
+</code></pre>
+
+<p>The first command supports sending reminders to Boxcar, see the BOXCAR.md in the git repository
+the rest of the commands only support email.</p>
+
+<p>You can specify multiple recipients using <em>--recipient</em> in a command seperated list:</p>
+
+<p>% gwtf notify --recipient="you@your.com,boxcar://you@your.com" --remind-10</p>
+
+<h1>Default Project, Data Dir or Email Recipient?</h1>
+
+<p>You can adjust the default data dir and project which would then be saved
+into the config file - <em>~/.gwtf</em>:</p>
+
+<pre><code>% gwtf --help
+Global Options:
+    --data, -d data_dir   - Path to storage directory (default: /home/rip/.gwtf.d)
+    --help                - Show this message
+    --project, -p project - Active project (default: default)
+</code></pre>
+
+<p>Now change the defaults:</p>
+
+<pre><code>% gwtf --data=/tmp/gwtf -p acme initconfig
+Created a new project acme in /tmp/gwtf/acme
+</code></pre>
+
+<p>And confirm the change is active:</p>
+
+<pre><code>% gwtf --help
+Global Options:
+    --data, -d data_dir   - Path to storage directory (default: /tmp/gwtf)
+    --help                - Show this message
+    --project, -p project - Active project (default: acme)
+</code></pre>
+
+<p>You can reset to factory defaults by just removing the <em>~/.gwtf</em> file or by changing
+the defaults again.</p>
+
+<p>You can also set defaults for options to individual commands, after running initconfig
+your <em>~/.gwtf</em> file will have empty space for each command.  If you wanted to specify a
+default email address for reminders simply edit that file and put in:</p>
+
+<pre><code>commands:
+  :remind:
+    :recipient: rip@devco.net
+</code></pre>
+
+<p>Now <em>gwtf help remind</em> will show it's defaulting to the new email address so you do not
+have to keep typing the --recipient on every invocation.</p>
+
+<h1>Contact?</h1>
+
+<p>R.I.Pienaar / rip@devco.net / <a href="https://github.com/ripienaar" class="user-mention">@ripienaar</a> / <a href="http://devco.net/">http://devco.net/</a></p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
