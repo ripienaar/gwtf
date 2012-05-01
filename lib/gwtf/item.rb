@@ -200,8 +200,10 @@ module Gwtf
       command_args << "--ifopen" if ifopen
 
       # attempt to parse the timespec with Chronic, if it cant then pass it onto at verbatim
-      if time = Gwtf.parse_time(timespec)
-        timespec = "-t %s" % [time.strftime("%Y%m%d%H%M")]
+      unless timespec.include?("+")
+        if time = Gwtf.parse_time(timespec)
+          timespec = "-t %s" % [time.strftime("%Y%m%d%H%M")]
+        end
       end
 
       command = "echo gwtf --project='%s' notify %s | at %s 2>&1" % [ @project, command_args.join(" "), timespec]
@@ -217,6 +219,17 @@ module Gwtf
 
       puts out
       out
+    end
+
+    def cancel_reminder
+      raise "No at job id recorded for this item, cannot cancel a reminder" unless has_at_job?
+
+      system("atrm %s" % at_job)
+
+      raise "Failed to remove the at job %s" % at_job unless $? == 0
+
+      update_property(:at_job, nil)
+      save
     end
 
     def send_reminder(recipient, mark_as_done)

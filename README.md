@@ -219,8 +219,10 @@ command with --recipient
 If you want to set a reminder for a future time but only if the item is still open by that time
 pass the --ifopen flag when creating the reminder
 
-To cancel reminders or see which ones you have scheduled use your normal at commands like atq
-and atrm
+Using the show command you can see what the associated at(1) is for a reminder and you can
+cancel it using the remind command
+
+    % gwtf remind 3 --cancel
 
 You can send notifications to iPhone, iPads and Macs using Boxcar, see the BOXCAR.md file in
 the git repository for details. Notfio is also supported for Android users, see the NOTIFO.md

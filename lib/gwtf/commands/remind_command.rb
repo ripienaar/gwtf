@@ -30,24 +30,32 @@ command [:remind, :rem] do |c|
   c.default_value nil
   c.flag [:at]
 
+  c.desc "Cancel a previously set reminder"
+  c.default_value nil
+  c.switch [:cancel]
+
   c.action do |global_options,options,args|
     raise "Please supply an item ID to remind about" if args.empty?
 
     STDOUT.sync = true
 
     unless options[:send]
-      if args.first =~ /^\d+$/ # got an item id, schedule a reminder
-        unless options[:at]
-          raise "Please specify a valid at(1) time specification with --at after the item id" unless args.size >= 2
-          options[:at] = args[1..-1].join(" ")
+      if args.first =~ /^\d+$/ # got an item id, manage a reminder
+        if options[:cancel]
+          item = @items.load_item(args.first)
+          item.cancel_reminder
+        else
+          unless options[:at]
+            raise "Please specify a valid at(1) time specification with --at after the item id" unless args.size >= 2
+            options[:at] = args[1..-1].join(" ")
+          end
+
+          print "Creating reminder at job for item #{args.first}: "
+
+          item = @items.load_item(args.first)
+          item.schedule_reminder(options[:at], options[:recipient], options[:done], options[:ifopen])
+          item.save
         end
-
-        print "Creating reminder at job for item #{args.first}: "
-
-        item = @items.load_item(args.first)
-        item.schedule_reminder(options[:at], options[:recipient], options[:done], options[:ifopen])
-        item.save
-
       else # new reminder in the 'reminders' project
         raise "Please specify an at(1) time specification" unless options[:at]
         raise "Please specify a subject for the reminder item" if args.empty?
