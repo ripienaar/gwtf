@@ -44,7 +44,9 @@ command [:remind, :rem] do |c|
 
         print "Creating reminder at job for item #{args.first}: "
 
-        @items.load_item(args.first).schedule_reminer(options[:at], options[:recipient], options[:done], options[:ifopen])
+        item = @items.load_item(args.first)
+        item.schedule_reminder(options[:at], options[:recipient], options[:done], options[:ifopen])
+        item.save
 
       else # new reminder in the 'reminders' project
         raise "Please specify an at(1) time specification" unless options[:at]
@@ -58,7 +60,7 @@ command [:remind, :rem] do |c|
         reminder.subject = args.join(" ")
 
         print "Creating reminder at job for item #{reminder.item_id}: "
-        out = reminder.schedule_reminer(options[:at], options[:recipient], true, true)
+        out = reminder.schedule_reminder(options[:at], options[:recipient], true, true)
 
         if out =~ /job (\d+) at (\d+-\d+-\d+)\s/
           reminder.due_date = reminder.date_to_due_date($2)

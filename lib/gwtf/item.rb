@@ -193,7 +193,7 @@ module Gwtf
       update_property(:status, "closed")
     end
 
-    def schedule_reminer(timespec, recipient, done=false, ifopen=false)
+    def schedule_reminder(timespec, recipient, done=false, ifopen=false)
       command_args = ["--remind=%s" % [item_id]]
       command_args << "--recipient=%s" % [ recipient ]
       command_args << "--done" if done

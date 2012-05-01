@@ -54,7 +54,7 @@ command [:new, :add, :n, :a, :c] do |c|
 
       print "Creating reminder at job for item #{item.item_id}: "
 
-      item.schedule_reminer(options[:remind], options[:recipient], options[:done], options[:ifopen])
+      item.schedule_reminder(options[:remind], options[:recipient], options[:done], options[:ifopen])
     end
 
     item.save
