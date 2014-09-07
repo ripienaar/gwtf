@@ -9,19 +9,13 @@ module Gwtf
         config = YAML.load_file(config_file)
 
         raise "Config needs to be a hash" unless config.is_a?(Hash)
-        raise "Config must include :apikey" unless config[:apikey]
-        raise "Config must include :apisecret" unless config[:apisecret]
-        raise "Config must include :serviceid" unless config[:serviceid]
-        raise "Config must include :sender" unless config[:sender]
+        raise "Config must include :icon_url" unless config[:icon_url]
+        raise "Config must include :source_name" unless config[:source_name]
+        raise "Config must include :sound" unless config[:sound]
 
         uri = URI.parse(recipient)
 
-        raise "Recipient must have a user portion" unless uri.user
         raise "Recipient must have a host portion" unless uri.host
-
-        email_address = "%s@%s" % [uri.user, uri.host]
-
-        bp = BoxcarAPI::Provider.new(config[:apikey], config[:apisecret], config[:sender])
 
         if item.project == "default"
           msg = "%s: %s" % [ item.item_id, item.subject ]
@@ -29,9 +23,22 @@ module Gwtf
           msg = "%s:%s: %s" % [ item.project, item.item_id, item.subject ]
         end
 
-        res = bp.notify(email_address, msg, {:from_screen_name => config[:sender], :icon_url => "http://www.devco.net/images/gwtf.jpg"})
+        api_uri = URI.parse("https://new.boxcar.io/api/notifications")
+        http = Net::HTTP.new(api_uri.host, api_uri.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        request = Net::HTTP::Post.new(api_uri.path)
 
-        raise "Failed to send message to Boxcar, got code #{res.code}" unless res.code == 200
+        request.set_form_data("user_credentials" => uri.host,
+                              "notification[title]" => item.subject,
+                              "notification[long_message]" => msg,
+                              "notification[sound]" => config[:sound],
+                              "notification[source_name]" => config[:source_name],
+                              "notification[icon_url]" => config[:icon_url])
+
+        res = http.request(request)
+
+        raise "Failed to send message to Boxcar, got code #{res.code}" unless res.code == "201"
       end
     end
   end
