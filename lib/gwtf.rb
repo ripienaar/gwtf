@@ -69,6 +69,12 @@ module Gwtf
         require 'gwtf/notifier/notifo'
 
         return Notifier::Notifo
+      when "pushover"
+        gem 'pushover'
+        require 'pushover'
+        require 'gwtf/notifier/pushover'
+
+        return Notifier::Pushover
       else
         raise "Do not know how to handle addresses of type #{protocol} for #{address}"
     end
