@@ -1,3 +1,5 @@
+2015/09/01 - Release 0.10.0
+2015/09/01 - Add Pushover support
 2012/05/01 - Allow cancelling of reminders without having to resort to atrm
 2012/05/01 - When using the remind application to set a reminder for an existing item save the at job id
 2012/04/19 - Release 0.8.0
